@@ -1,7 +1,7 @@
 import crash.collections.Collection;
 import crash.collections.ArrayList;
 
-public class ProfanityChecker {
+public class {
 
 	Collection<String> badWords;
 	
