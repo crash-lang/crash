@@ -1,11 +1,11 @@
 import crash.collections.Collection;
 import crash.collections.ArrayList;
 
-public class {
+public class ProfanityChecker {
 
 	Collection<String> badWords;
 	
-	public() {
+	public () {
 		this.badWords = new ArrayList();
 	}
 	
@@ -18,9 +18,9 @@ public class {
 	}
 	
 	public boolean isBad(String input, f32 sensitivity) {
-		String lowerCaseInput = input.toLowerCase();
+		mut String lowerCaseInput = input.toLowerCase();
 		
-		mut double percentage = 0;
+		mut f64 percentage = 0;
 		
 		for (String word : lowerCaseInput.split(" ")) {
 			for (String badWord : this.badWords) {
@@ -45,5 +45,5 @@ public class {
 		return 1.0;
 	}
 	
-	Collection<String> getBadWords() this.badWords;
+	Collection<String> getBadWords() -> this.badWords;
 }

@@ -2,23 +2,23 @@
 public u32 getDistance(String target, String text) {
 	int targetLength = target.length;
 	int textLength = text.length;
-	mut int[][] T = new u32[targetLength + 1][textLength + 1];
+	mut i32[][] T = new u32[targetLength + 1][textLength + 1];
 	
-	for (int charIndex = 1; charIndex <= targetLength; charIndex++) {
+	for (mut i32 charIndex = 1; charIndex <= targetLength; charIndex++) {
 		T[charIndex][0] = charIndex;
 	}
 	
-	for (int charIndex = 1; charIndex <= textLength; charIndex++) {
+	for (mut i32 charIndex = 1; charIndex <= textLength; charIndex++) {
 		T[0][charIndex] = charIndex;
 	}
 	
-	mut int cost;
+	mut i32 cost;
 	
-	for (int targetCharIndex = 1; targetCharIndex <= targetLength; targetCharIndex++) {
-		for (int textCharIndex = 1; textCharIndex <= textLength; textCharIndex++) {
+	for (mut i32 targetCharIndex = 1; targetCharIndex <= targetLength; targetCharIndex++) {
+		for (mut i32 textCharIndex = 1; textCharIndex <= textLength; textCharIndex++) {
 			cost = target[targetCharIndex - 1] == text[textCharIndex - 1] ? 0 : 1;
-                T[targetCharIndex][textCharIndex] = Integer.min(Integer.min(T[targetCharIndex - 1][textCharIndex] + 1, T[targetCharIndex][textCharIndex - 1] + 1),
-                        T[targetCharIndex - 1][textCharIndex - 1] + cost);
+                	T[targetCharIndex][textCharIndex] = Integer.min(Integer.min(T[targetCharIndex - 1][textCharIndex] + 1, T[targetCharIndex][textCharIndex - 1] + 1),
+                        	T[targetCharIndex - 1][textCharIndex - 1] + cost);
 		}
 	}
 	
