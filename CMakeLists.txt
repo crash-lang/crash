@@ -3,4 +3,5 @@ project(crash)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(crash-lexer)
+add_subdirectory(lib/crash-lexer)
+add_subdirectory(crash-compiler)
