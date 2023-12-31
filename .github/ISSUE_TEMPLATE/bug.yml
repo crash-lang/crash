@@ -1,0 +1,92 @@
+name: Bug report
+description: Report a bug of the Crash compiler or standard library
+labels:
+  - "type: bug"
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for taking the time to report a bug in the Crash Programming Language!**
+
+        Your diligence in helping us identify and resolve issues is greatly appreciated. 
+        Before submitting your bug report, please review the following guidelines to ensure effective collaboration:
+
+        ### Guidelines:
+
+        1. **Search Existing Issues:** Check the existing issues to make sure that the bug hasn't been reported already. If it has, please add any additional information or insights you may have.
+
+        2. **Reproducibility:** Clearly describe how to reproduce the bug. Provide steps, code snippets, or a minimal example that demonstrates the issue.
+
+        3. **Environment:** Include details about your environment, like dependencies or anything else.
+
+        ### Additional Information:
+
+        - Any additional context or information that might be relevant to the bug. *(Even if they seem out of context)*
+        - Attach screenshots or error messages if applicable.
+
+  - type: dropdown
+    attributes:
+      label: "Affected project"
+      description: "Is the bug affecting the Crash compiler or the standard library?"
+      multiple: true
+      options: ["Standard Library", "Compiler"]
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Crash version"
+      description: "Compiler version available with command `crashc --version` "
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Operating system"
+      description: "Helpful for reproducibility."
+      placeholder: "Fedora 38; Windows 11; macOS"
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: "Bug Description"
+      description: "Briefly describe the bug you encountered with/in Crash."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Reproducible Steps"
+      description: "Clearly Describe how to reproduce the bug."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Expected Behavior"
+      description: "Clearly state what you expected to happen."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Actual Behavior"
+      description: "Describe what actually happened and how it deviates from your expectations."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Other"
+      description: "Is there anything else that bothers you?"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        Your efforts in reporting and resolving bugs contribute to the stability and reliability of Crash. Thank you for being part of our community and helping us improve!
+
+        **Note:** If you have any questions or need clarification, please feel free to reach out to the community or the maintainers.
