@@ -38,6 +38,7 @@ body:
     attributes:
       label: "Crash version"
       description: "Compiler version available with command `crashc --version` "
+      placeholder: "7.2; 5.7"
     validations:
       required: true
 
