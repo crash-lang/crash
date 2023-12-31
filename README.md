@@ -21,8 +21,7 @@ This language provides a balance between simplicity and power,
 making it accessible to both beginners and experienced developers.
 
 This is the main source code repository for [Crash](https://crash-lang.org).
-It contains the compiler *(not [Crasher](https://github.com/crash-lang/crasher))* and standard library.
-
+It contains the [compiler](compiler) *(not [Crasher](https://github.com/crash-lang/crasher))* and [standard library](lib).
 
 ### A Crash Language Project
 This Project is licensed under the [Apache 2.0 License](LICENSE).
