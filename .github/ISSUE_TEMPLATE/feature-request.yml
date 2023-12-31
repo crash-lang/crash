@@ -1,0 +1,52 @@
+name: Feature Request
+description: Suggest a new idea for Crash
+labels:
+  - "type: feature"
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for contributing to the Crash Programming Language!**
+
+        We appreciate your interest in making Crash even better. 
+        Before submitting your feature request, 
+        please take a moment to review the following guidelines to ensure a smooth and effective collaboration:
+
+        ### Guidelines:
+
+        1. **Be Specific:** Provide as much detail as possible about your feature request. Clear and concise descriptions help us understand your idea better.
+
+        2. **Check Existing Requests:** Before submitting a new request, check existing issues to ensure that a similar feature hasn't been proposed already. If it has, feel free to add your thoughts or vote for it.
+
+        3. **Relevance:** Make sure your feature aligns with the goals and philosophy of Crash. Features that enhance the language without compromising its simplicity are highly encouraged.
+
+        4. **Avoid Duplicates:** Double-check that your proposed feature hasn't already been implemented or is in the process of being developed.
+
+  - type: textarea
+    attributes:
+      label: "Feature description"
+      description: "Briefly describe the feature you would like to see in Crash."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Use Case"
+      description: "Explain the scenario where this feature would be beneficial."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Implementation ideas"
+      description: "If you have suggestions on how to implement the feature, feel free to share them."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        Your contributions and insights play a crucial role in shaping the future of Crash. Thank you for being part of our community and helping us make Crash even better!
+
+        **Note:** If you have any questions or need clarification, please feel free to reach out to the community or the maintainers.
