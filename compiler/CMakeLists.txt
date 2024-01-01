@@ -12,4 +12,8 @@ endif ()
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
 
-#target_link_libraries(crashc LLVM) No targets configured yet
+add_subdirectory(crashc-ast)
+add_subdirectory(crashc-lex)
+add_subdirectory(crashc-parser)
+
+#target_link_libraries(TARGET LLVM)
