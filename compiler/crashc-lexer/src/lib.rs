@@ -115,141 +115,55 @@ impl Cursor<'_> {
         None
     }
 
-    fn try_match_string_literal(&mut self) -> bool {
-        let mut escaped = false;
+    fn try_match_char_literal(&mut self) -> Option<Token> {
+        if self.current_char() == Some('\'') {
+            let start_pos = self.pos_within_token();
+            self.bump();
 
-        while let Some(current_char) = self.current_char() {
-            if current_char == '\\' && !escaped {
-                escaped = true;
-            } else if current_char == '"' && !escaped {
-                self.advance();
-                return true;
-            } else {
-                escaped = false;
+            if let Some(char_value) = self.current_char() {
+                self.bump();
+                if self.current_char() == Some('\'') {
+                    self.bump();
+                    let end_pos = self.pos_within_token();
+                    return Some(Token::new(TokenKind::Literal {
+                        kind: LiteralKind::Character {
+                            terminated: true
+                        },
+                    }, end_pos - start_pos));
+                }
             }
-
-            self.advance();
         }
 
-        false
+        Some(Token::new(TokenKind::Literal {
+            kind: LiteralKind::Character {
+                terminated: false
+            },
+        }, 2))
     }
 
-    fn try_match_char_literal(&mut self) -> bool {
-        return false;
-    }
+    fn try_match_string_literal(&mut self) -> Option<Token> {
+        if self.current_char() == Some('"') {
+            let start_pos = self.pos_within_token();
+            self.bump();
 
-    fn try_match_integer_literal(&mut self) -> Option<Token> {
-        let mut base = None;
-
-        if let Some(current_char) = self.current_char() {
-            if current_char == 'b' {
-                base = Some(Base::Binary);
-            } else if current_char == 'o' {
-                base = Some(Base::Octal);
-            } else if current_char == '#' {
-                base = Some(Base::Hexadecimal);
+            while let Some(current_char) = self.current_char() {
+                self.bump();
+                if current_char == '"' {
+                    let end_pos = self.pos_within_token();
+                    return Some(Token::new(TokenKind::Literal {
+                        kind: LiteralKind::String {
+                            terminated: true,
+                        },
+                    }, end_pos - start_pos));
+                }
             }
         }
 
-        let mut empty = false;
-
-        while let Some(current_char) = self.current_char() {
-            if current_char == '_' && !empty {
-                // skip _
-            } else if !current_char.is_digit(base.map_or(10, |b| b as u32)) {
-                return Some(Token::new(TokenKind::Literal {
-                    kind: LiteralKind::Integer {
-                        base: base.unwrap_or(Base::Decimal),
-                        empty
-                    }
-                }, self.pos_within_token()));
-            } else {
-                empty = false;
-            }
-
-            self.advance();
-        }
-
-        None
-    }
-
-    fn try_match_float_literal(&mut self) -> Option<Token> {
-        let mut empty_exponent = false;
-
-        while let Some(current_char) = self.current_char() {
-            if current_char == '_' && !empty_exponent {
-                // skip _
-            } else if current_char == '.' {
-                self.advance();
-                return self.try_match_decimal_part();
-            } else if current_char == 'e' || current_char == 'E' {
-                self.advance();
-                return self.try_match_exponent_part();
-            } else if !current_char.is_digit(10) {
-                return Some(Token::new(TokenKind::Literal {
-                    kind: LiteralKind::Float {
-                        empty_exponent,
-                    },
-                }, self.pos_within_token()));
-            } else {
-                empty_exponent = false;
-            }
-
-            self.advance();
-        }
-
-        None
-    }
-
-    fn try_match_decimal_part(&mut self) -> Option<Token> {
-        let mut empty = true;
-
-        while let Some(current_char) = self.current_char() {
-            if current_char == '_' && !empty {
-                // skip _
-            } else if !current_char.is_digit(10) {
-                return Some(Token::new(TokenKind::Literal {
-                    kind: LiteralKind::Float {
-                        empty_exponent: true,
-                    },
-                }, self.pos_within_token()));
-            } else {
-                empty = false;
-            }
-
-            self.advance();
-        }
-
-        None
-    }
-
-    fn try_match_exponent_part(&mut self) -> Option<Token> {
-        let mut empty_exponent = true;
-
-        if let Some(current_char) = self.current_char() {
-            if current_char == '+' || current_char == '-' {
-                empty_exponent = false;
-                self.advance();
-            }
-        }
-
-        while let Some(current_char) = self.current_char() {
-            if current_char == '_' && !empty_exponent {
-                // skip _
-            } else if !current_char.is_digit(10) {
-                return Some(Token::new(TokenKind::Literal {
-                    kind: LiteralKind::Float {
-                        empty_exponent,
-                    },
-                }, self.pos_within_token()));
-            } else {
-                empty_exponent = false;
-            }
-
-            self.advance();
-        }
-
-        None
+        Some(Token::new(TokenKind::Literal {
+            kind: LiteralKind::String {
+                terminated: false,
+            },
+        }, 1))
     }
 
     fn tokenize_next(&mut self) -> Option<Token> {
@@ -258,26 +172,10 @@ impl Cursor<'_> {
         if let Some(c) = self.current_char() {
             match c {
                 '"' => {
-                    self.advance();
-
-                    let terminated = self.try_match_string_literal();
-                    return Some(Token::new(TokenKind::Literal {
-                        kind: LiteralKind::String { terminated }
-                    }, self.pos_within_token() + 2));
+                    return self.try_match_string_literal();
                 }
                 '\'' => {
-                    self.advance();
-
-                    let terminated = self.try_match_char_literal();
-                    return Some(Token::new(TokenKind::Literal {
-                        kind: LiteralKind::Character { terminated }
-                    }, 3));
-                }
-                '0'..='9' => {
-                    if let Some(token) = self.try_match_float_literal() {
-                        return Some(token);
-                    }
-                    return self.try_match_integer_literal();
+                    return self.try_match_char_literal();
                 }
                 ';' => {
                     self.advance();

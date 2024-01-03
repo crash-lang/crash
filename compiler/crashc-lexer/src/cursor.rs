@@ -38,8 +38,6 @@ impl<'a> Cursor<'a> {
         }
     }
 
-
-
     pub fn as_str(&self) -> &'a str {
         self.chars.as_str()
     }
@@ -88,11 +86,7 @@ impl<'a> Cursor<'a> {
 
     pub(crate) fn bump(&mut self) -> Option<char> {
         let c = self.chars.next()?;
-
-        {
-            self.prev  = c;
-        }
-
+        self.prev  = c;
         Some(c)
     }
 
