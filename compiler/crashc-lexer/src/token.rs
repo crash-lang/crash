@@ -252,7 +252,9 @@ pub enum LiteralKind {
     String { terminated: bool },
 
     /// "true" or "false"
-    Boolean
+    Boolean {
+        val: bool
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]

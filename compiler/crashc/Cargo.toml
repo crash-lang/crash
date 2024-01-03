@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 
 crashc_ast = { path = "../crashc-ast" }
+crashc_lexer = { path = "../crashc-lexer" }
