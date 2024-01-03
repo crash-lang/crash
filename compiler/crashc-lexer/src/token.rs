@@ -2,12 +2,13 @@
 #[derive(Debug)]
 pub struct Token {
     pub kind: TokenKind,
-    pub len: u32
+    pub len: u32,
+    pub content: String
 }
 
 impl Token {
-    pub(crate) fn new (kind: TokenKind, len: u32) -> Token {
-        Token { kind, len }
+    pub(crate) fn new (kind: TokenKind, len: u32, content: &str) -> Token {
+        Token { kind, len, content: content.to_string() }
     }
 }
 
@@ -23,8 +24,6 @@ pub enum TokenKind {
     BlockComment,
 
     Whitespace,
-
-    Identifier,
 
     Literal { kind: LiteralKind },
 
@@ -50,10 +49,10 @@ pub enum TokenKind {
     CloseCurlyBrace,
 
     /// "["
-    OpenSquaredBrace,
+    OpenSquareBrace,
 
     /// "]"
-    CloseSquaredBrace,
+    CloseSquareBrace,
 
     /// "?"
     Question,
@@ -161,6 +160,7 @@ pub enum TokenKind {
 
     AccessModifier { kind: ModifierKind },
 
+    Identifier,
 
     /// End of input
     Eof
@@ -228,8 +228,8 @@ pub enum LiteralKind {
     /**
     Any _ gets ignored and is just a visual splitter
 
-    Binary: b#0000_1011
-    Octal: o#124_5
+    Binary: b0000_1011
+    Octal: o124_5
     Decimal: 345_7324
     Hexadecimal: #fff345
      */
@@ -244,9 +244,7 @@ pub enum LiteralKind {
     Float literals shouldn't have a base,
     because it would be to complicated anyway.
      */
-    Float {
-        empty_exponent: bool
-    },
+    Float,
 
     /// "'a'" | "'b'"
     Character { terminated: bool },
