@@ -1,5 +1,5 @@
 # Jetbrains IDE
 .idea
 
-# CMake
-cmake-build-debug
+# Cargo
+target
