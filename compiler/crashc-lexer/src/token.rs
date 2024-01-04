@@ -249,8 +249,7 @@ pub enum LiteralKind {
     Hexadecimal: #fff345
      */
     Integer {
-        base: Base,
-        empty: bool
+        base: Base
     },
 
     /**
