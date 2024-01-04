@@ -188,7 +188,7 @@ impl Cursor<'_> {
 
         let base_prefix = match self.current_char() {
             Some('o') => {
-                let next = self.second();
+                let next = self.next();
                 if !next.is_digit(8) {
                     return None
                 }
@@ -326,7 +326,7 @@ impl Cursor<'_> {
     }
 
     fn double_char_token(&mut self, kind1: TokenKind, kind2: TokenKind, expected: char, val1: &str, val2: &str) -> Option<Token> {
-        let next_char = self.second();
+        let next_char = self.next();
         if next_char == expected {
             self.bump();
             self.bump();
@@ -375,7 +375,7 @@ impl Cursor<'_> {
                 '&' => self.double_char_token(TokenKind::Copy, TokenKind::And, '&', "&", "&&"),
 
                 '|' => {
-                    let next_char = self.second();
+                    let next_char = self.next();
                     if next_char == '|' {
                         self.bump();
                         self.bump();
