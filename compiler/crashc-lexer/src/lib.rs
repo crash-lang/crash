@@ -16,6 +16,8 @@
 
 mod cursor;
 mod token;
+#[cfg(test)]
+mod test;
 
 use std::string::String;
 pub use crate::cursor::Cursor;
@@ -151,7 +153,6 @@ impl Cursor<'_> {
         if self.current_char() == Some('"') {
             let start_pos = self.pos_within_token();
             self.bump();
-
             let mut content = String::new();
 
             while let Some(current_char) = self.current_char() {
@@ -160,11 +161,15 @@ impl Cursor<'_> {
 
                 if current_char == '"' {
                     let end_pos = self.pos_within_token();
+
+                    let mut chars = content.chars();
+                    chars.next_back();
+
                     return Some(Token::new(TokenKind::Literal {
                         kind: LiteralKind::String {
                             terminated: true,
                         },
-                    }, end_pos - start_pos, &content));
+                    }, end_pos - start_pos, chars.as_str()));
                 }
             }
         }
@@ -199,12 +204,25 @@ impl Cursor<'_> {
             _ => None,
         };
 
+        let radix;
+
+        if let Some(prefix) = base_prefix {
+            radix = match prefix {
+                'o' => 8,
+                'b' => 2,
+                '#' => 16,
+                 _ => 0
+            }
+        } else {
+            radix = 10;
+        }
+
         while let Some(current_char) = self.current_char() {
             if current_char == '_' {
                 self.bump();
                 continue;
             }
-            if current_char.is_digit(10) {
+            if current_char.is_digit(radix) {
                 has_digit = true;
                 content.push(current_char);
                 self.bump();
@@ -228,7 +246,11 @@ impl Cursor<'_> {
 
         if is_float {
             while let Some(current_char) = self.current_char() {
-                if current_char.is_digit(10) || current_char == '_' {
+                if current_char == '_' {
+                    self.bump();
+                    continue;
+                }
+                if current_char.is_digit(radix) {
                     has_digit = true;
                     content.push(current_char);
                     self.bump();
@@ -246,7 +268,7 @@ impl Cursor<'_> {
                     self.bump();
                     continue;
                 }
-                if current_char.is_digit(10) {
+                if current_char.is_digit(radix) {
                     has_digit = true;
                     content.push(current_char);
                     self.bump();
@@ -270,11 +292,11 @@ impl Cursor<'_> {
         let end_pos = self.pos_within_token();
 
         let kind = if let Some(base) = prefix {
-            LiteralKind::Integer { base, empty: false }
+            LiteralKind::Integer { base }
         } else if is_float {
             LiteralKind::Float
         } else {
-            LiteralKind::Integer { base: Base::Decimal, empty: false }
+            LiteralKind::Integer { base: Base::Decimal }
         };
 
         Some(Token::new(TokenKind::Literal { kind }, end_pos - start_pos, &content))
