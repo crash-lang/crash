@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-use crate::{Base, LiteralKind, tokenize_string, TokenKind};
+use crate::*;
 
 #[test]
-fn test_tokenize_string_string_literal() {
+pub fn test_tokenize_string_string_literal() {
     let tokens = tokenize_string("\"Hello world\" \"Hey you\"");
     let mut index = 0;
     for tok in tokens {
@@ -44,7 +44,7 @@ fn test_tokenize_string_string_literal() {
 }
 
 #[test]
-fn test_tokenize_string_float_literals() {
+pub fn test_tokenize_string_float_literals() {
     let tokens = tokenize_string(r"
         12.5_6
         34.6_356_56
@@ -75,7 +75,7 @@ fn test_tokenize_string_float_literals() {
 }
 
 #[test]
-fn test_tokenize_string_int_literals() {
+pub fn test_tokenize_string_int_literals() {
     let tokens = tokenize_string(r"
         345_65_6
         #3_4546f
