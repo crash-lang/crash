@@ -1,3 +1,19 @@
+/*
+ * Copyright 2024 Julian Siebert
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use std::str::Chars;
 
 pub struct Cursor<'a> {
@@ -9,22 +25,12 @@ pub struct Cursor<'a> {
 pub(crate) const EOF_CHAR: char = '\0';
 
 pub(crate) fn is_whitespace(c: char) -> bool {
-    matches!(
-        c,
-        '\u{0009}'   // \t
-        | '\u{000A}' // \n
-        | '\u{000B}' // vertical tab
-        | '\u{000C}' // form feed
-        | '\u{000D}' // \r
-        | '\u{0020}' // space
-
-        | '\u{0085}'
-
-        | '\u{200E}' // LEFT-TO-RIGHT MARK
-        | '\u{200F}' // RIGHT-TO-LEFT MARK
-
-        | '\u{2028}' // LINE SEPARATOR
-        | '\u{2029}' // PARAGRAPH SEPARATOR
+    matches!(c, '\u{0009}' | '\u{000A}'
+        | '\u{000B}' | '\u{000C}'
+        | '\u{000D}' | '\u{0020}'
+        | '\u{0085}' | '\u{200E}'
+        | '\u{200F}' | '\u{2028}'
+        | '\u{2029}'
     )
 }
 
