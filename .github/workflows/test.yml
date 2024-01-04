@@ -16,7 +16,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --manifest-path ./compiler/crashc
+          args: --workspace --manifest-path ./compiler/crashc/Cargo.toml
 
   test:
     name: Compiler Cargo test
@@ -31,4 +31,4 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --workspace --manifest-path ./compiler/crashc-lexer
+          args: --workspace --manifest-path ./compiler/crashc-lexer/Cargo.toml
