@@ -18,8 +18,8 @@ jobs:
           override: true
 
       - name: Run Cargo check
-        working-directory: ./compiler
         uses: actions-rs/cargo@v1
+        working-directory: ./compiler
         with:
           command: check
 
@@ -38,7 +38,7 @@ jobs:
           override: true
 
       - name: Run Cargo test in lexer
-        working-directory: ./compiler
         uses: actions-rs/cargo@v1
+        working-directory: ./compiler
         with:
           command: test
