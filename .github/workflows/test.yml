@@ -3,23 +3,39 @@ on: [push, pull_request]
 name: Testing
 
 jobs:
-
-
-  test:
-    name: Compiler Cargo test
+  check:
+    name: Compiler Cargo check
     runs-on: ubuntu-latest
     steps:
-      - name: Install Toolchain
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
 
+  test:
+    name: Compiler Cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "10.0"
       - name: Testing modules
         run: |
           cd compiler/crashc
           cargo test
           cd ../crashc-lexer
           cargo test
+          
