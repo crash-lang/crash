@@ -311,10 +311,7 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_number_literal() {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 '0'..='9' => self.try_match_number_literal(),
                 ';' => self.single_char_token(TokenKind::Semicolon, ";"),
@@ -369,19 +366,13 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_integer_type() {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 's' => {
                     if let Some(token) = self.try_match_keyword("switch", TokenKind::Switch) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'm' => {
                     if let Some(token) = self.try_match_keyword("match", TokenKind::Match) {
@@ -390,19 +381,13 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_keyword("mut", TokenKind::Mutable) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'l' => {
                     if let Some(token) = self.try_match_keyword("loop", TokenKind::Loop) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'f' => {
                     if let Some(token) = self.try_match_keyword("for", TokenKind::For) {
@@ -418,10 +403,7 @@ impl Cursor<'_> {
                     }) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'r' => {
                     if let Some(token) = self.try_match_keyword("return", TokenKind::Return) {
@@ -430,10 +412,7 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_keyword("ret", TokenKind::Return) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'c' => {
                     if let Some(token) = self.try_match_keyword("class", TokenKind::Class) {
@@ -442,19 +421,13 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_char_type() {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'e' => {
                     if let Some(token) = self.try_match_keyword("enum", TokenKind::Enum) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'p' => {
                     if let Some(token) = self.try_match_keyword("public",
@@ -481,10 +454,7 @@ impl Cursor<'_> {
                                                                 }) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'b' => {
                     if let Some(token) = self.try_match_boolean_type() {
@@ -494,19 +464,13 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_number_literal() {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 'u' => {
                     if let Some(token) = self.try_match_unsigned_integer_type() {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 't' => {
                     if let Some(token) = self.try_match_keyword("true", TokenKind::Literal {
@@ -516,16 +480,10 @@ impl Cursor<'_> {
                     }) {
                         return Some(token);
                     }
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
                 _ => {
-                    if let Some(token) = self.try_match_identifier_literal() {
-                        return Some(token);
-                    }
-                    return None;
+                    return self.try_match_identifier_literal();
                 }
             }
         }
