@@ -16,6 +16,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: check
+          args: --workspace --manifest-path ./compiler/crashc
 
   test:
     name: Compiler Cargo test
@@ -27,7 +28,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - working-directory: "./compiler/crash-lexer"
       - uses: actions-rs/cargo@v1
         with:
           command: test
+          args: --workspace --manifest-path ./compiler/crashc-lexer
