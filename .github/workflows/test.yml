@@ -22,12 +22,21 @@ jobs:
     name: Compiler Cargo test
     runs-on: ubuntu-latest
     steps:
+      - name: Install Toolchain
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
+
+      - name: Testing modules
+      # Crash-main
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --manifest-path ./compiler/crashc/Cargo.toml
+      # Crashc-lexer
       - uses: actions-rs/cargo@v1
         with:
           command: test
