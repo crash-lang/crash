@@ -13,7 +13,10 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - run: echo "hey"
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --workspace --manifest-path ./compiler/crashc/Cargo.toml
 
   test:
     name: Compiler Cargo test
@@ -28,5 +31,13 @@ jobs:
           override: true
 
       - name: Testing modules
-      - working-directory: ./compiler/crashc
-        run: cargo test
+      # Crash-main
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --manifest-path ./compiler/crashc/Cargo.toml
+      # Crashc-lexer
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --manifest-path ./compiler/crashc-lexer/Cargo.toml
