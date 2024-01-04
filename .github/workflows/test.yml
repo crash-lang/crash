@@ -27,6 +27,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - working-directory: "./compiler/crash-lexer"
       - uses: actions-rs/cargo@v1
         with:
           command: test
