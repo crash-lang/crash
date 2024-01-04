@@ -31,13 +31,8 @@ jobs:
           override: true
 
       - name: Testing modules
-      # Crash-main
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --workspace --manifest-path ./compiler/crashc/Cargo.toml
-      # Crashc-lexer
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --workspace --manifest-path ./compiler/crashc-lexer/Cargo.toml
+        run: |
+          cd compiler/crashc
+          cargo test
+          cd ../crashc-lexer
+          cargo test
