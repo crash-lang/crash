@@ -13,6 +13,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - run: echo "hey"
 
   test:
     name: Compiler Cargo test
