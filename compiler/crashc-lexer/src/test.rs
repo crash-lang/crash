@@ -17,7 +17,7 @@
 use crate::*;
 
 #[test]
-pub fn test_tokenize_string_string_literal() {
+fn test_tokenize_string_string_literal() {
     let tokens = tokenize_string("\"Hello world\" \"Hey you\"");
     let mut index = 0;
     for tok in tokens {
@@ -36,7 +36,7 @@ pub fn test_tokenize_string_string_literal() {
                 assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::String { terminated: true } });
             }
             _ => {
-                panic!("We don't have enogh strings tokenized");
+                panic!("We don't have enough strings tokenized");
             }
         }
         index+=1;
@@ -44,7 +44,7 @@ pub fn test_tokenize_string_string_literal() {
 }
 
 #[test]
-pub fn test_tokenize_string_float_literals() {
+fn test_tokenize_string_float_literals() {
     let tokens = tokenize_string(r"
         12.5_6
         34.6_356_56
@@ -67,7 +67,7 @@ pub fn test_tokenize_string_float_literals() {
                 assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float })
             }
             _ => {
-                panic!("We don't have enogh floats tokenized");
+                panic!("We don't have enough floats tokenized");
             }
         }
         index+=1;
@@ -75,7 +75,7 @@ pub fn test_tokenize_string_float_literals() {
 }
 
 #[test]
-pub fn test_tokenize_string_int_literals() {
+fn test_tokenize_string_int_literals() {
     let tokens = tokenize_string(r"
         345_65_6
         #3_4546f
@@ -110,7 +110,56 @@ pub fn test_tokenize_string_int_literals() {
                 assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Binary } })
             }
             _ => {
-                panic!("We don't have enogh integers tokenized");
+                panic!("We don't have enough integers tokenized");
+            }
+        }
+        index+=1;
+    }
+}
+
+#[test]
+fn test_tokenize_string_comments() {
+    let tokens = tokenize_string(r"
+        // Hi I'm a comment
+        i32 234.4
+        /*
+            Hi,
+            Im a multi-
+            line comment
+            u32
+            u64
+        */
+        u32 #fff434
+    ");
+
+    let mut index = 0;
+    for tok in tokens {
+        let content = tok.content;
+        let len = tok.len;
+        let kind = tok.kind;
+        match index {
+            0 => {
+                assert_eq!(content, "i32");
+                assert_eq!(len, 3);
+                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::I32 })
+            }
+            1 => {
+                assert_eq!(content, "234.4");
+                assert_eq!(len, 5);
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float })
+            }
+            2 => {
+                assert_eq!(content, "u32");
+                assert_eq!(len, 3);
+                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::U32 })
+            }
+            3 => {
+                assert_eq!(content, "fff434");
+                assert_eq!(len, 7);
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Hexadecimal } })
+            }
+            _ => {
+                panic!("We don't have enough integers tokenized");
             }
         }
         index+=1;
