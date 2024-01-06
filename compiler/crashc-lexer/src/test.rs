@@ -59,12 +59,12 @@ fn test_tokenize_string_float_literals() {
             0 => {
                 assert_eq!(content, "12.56");
                 assert_eq!(len, 6);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float });
             }
             1 => {
                 assert_eq!(content, "34.635656");
                 assert_eq!(len, 11);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float });
             }
             _ => {
                 panic!("We don't have enough floats tokenized");
@@ -92,22 +92,22 @@ fn test_tokenize_string_int_literals() {
             0 => {
                 assert_eq!(content, "345656");
                 assert_eq!(len, 8);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Decimal } })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Decimal } });
             }
             1 => {
                 assert_eq!(content, "34546f");
                 assert_eq!(len, 8);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Hexadecimal } })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Hexadecimal } });
             }
             2 => {
                 assert_eq!(content, "456");
                 assert_eq!(len, 4);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Octal } })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Octal } });
             }
             3 => {
                 assert_eq!(content, "00010000");
                 assert_eq!(len, 10);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Binary } })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Binary } });
             }
             _ => {
                 panic!("We don't have enough integers tokenized");
@@ -141,28 +141,99 @@ fn test_tokenize_string_comments() {
             0 => {
                 assert_eq!(content, "i32");
                 assert_eq!(len, 3);
-                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::I32 })
+                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::I32 });
             }
             1 => {
                 assert_eq!(content, "234.4");
                 assert_eq!(len, 5);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Float });
             }
             2 => {
                 assert_eq!(content, "u32");
                 assert_eq!(len, 3);
-                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::U32 })
+                assert_eq!(kind, TokenKind::Primitive { kind: PrimitiveKind::U32 });
             }
             3 => {
                 assert_eq!(content, "fff434");
                 assert_eq!(len, 7);
-                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Hexadecimal } })
+                assert_eq!(kind, TokenKind::Literal { kind: LiteralKind::Integer { base: Base::Hexadecimal } });
             }
             _ => {
-                panic!("We don't have enough integers tokenized");
+                panic!("We don't have enough things tokenized");
             }
         }
         index+=1;
     }
 }
 
+#[test]
+fn test_tokenize_string_symbols() {
+    let tokens = tokenize_string(r"
+        ;{([)]},:?
+    ");
+
+    println!("{:?}", tokens);
+
+    let mut index = 0;
+    for tok in tokens {
+        let content = tok.content;
+        let len = tok.len;
+        let kind = tok.kind;
+        match index {
+            0 => {
+                assert_eq!(content, ";");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::Semicolon);
+            }
+            1 => {
+                assert_eq!(content, "{");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::OpenCurlyBrace);
+            }
+            2 => {
+                assert_eq!(content, "(");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::OpenBrace);
+            }
+            3 => {
+                assert_eq!(content, "[");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::OpenSquareBrace);
+            }
+            4 => {
+                assert_eq!(content, ")");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::CloseBrace);
+            }
+            5 => {
+                assert_eq!(content, "]");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::CloseSquareBrace);
+            }
+            6 => {
+                assert_eq!(content, "}");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::CloseCurlyBrace);
+            }
+            7 => {
+                assert_eq!(content, ",");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::Comma);
+            }
+            8 => {
+                assert_eq!(content, ":");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::Colon);
+            }
+            9 => {
+                assert_eq!(content, "?");
+                assert_eq!(len, 1);
+                assert_eq!(kind, TokenKind::Question);
+            }
+            _ => {
+                panic!("We don't have enough symbols tokenized");
+            }
+        }
+        index+=1;
+    }
+}
