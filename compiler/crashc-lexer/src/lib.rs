@@ -405,7 +405,6 @@ impl Cursor<'_> {
                 '*' => self.single_char_token(TokenKind::Multiply, "*"),
                 '/' => self.single_char_token(TokenKind::Divide, "/"),
                 '%' => self.single_char_token(TokenKind::Modulus, "%"),
-                '&' => self.single_char_token(TokenKind::Add, "&"),
 
                 '=' => self.double_char_token(TokenKind::Assign, TokenKind::Equals, '=', "=", "=="),
                 '!' => self.double_char_token(TokenKind::Exclamation, TokenKind::NotEquals, '=', "!", "!="),
