@@ -30,14 +30,6 @@ impl Token {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TokenKind {
 
-    Invalid,
-
-    /// "// comment"
-    LineComment,
-
-    /// "/* block comment */"
-    BlockComment,
-
     Whitespace,
 
     Literal { kind: LiteralKind },
