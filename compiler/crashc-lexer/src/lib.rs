@@ -367,12 +367,12 @@ impl Cursor<'_> {
                 '*' => self.single_char_token(TokenKind::Multiply, "*"),
                 '/' => self.single_char_token(TokenKind::Divide, "/"),
                 '%' => self.single_char_token(TokenKind::Modulus, "%"),
+                '&' => self.single_char_token(TokenKind::Add, "&"),
 
                 '=' => self.double_char_token(TokenKind::Assign, TokenKind::Equals, '=', "=", "=="),
                 '!' => self.double_char_token(TokenKind::Exclamation, TokenKind::NotEquals, '=', "!", "!="),
                 '>' => self.double_char_token(TokenKind::Greater, TokenKind::GreaterOrEqual, '=', ">", ">="),
                 '<' => self.double_char_token(TokenKind::Less, TokenKind::LessOrEqual, '=', "<", "<="),
-                '&' => self.double_char_token(TokenKind::Copy, TokenKind::And, '&', "&", "&&"),
 
                 '|' => {
                     let next_char = self.next();
@@ -380,6 +380,16 @@ impl Cursor<'_> {
                         self.bump();
                         self.bump();
                         return Some(Token::new(TokenKind::Or, 2, "||"));
+                    }
+                    return None;
+                }
+
+                '&' => {
+                    let next_char = self.next();
+                    if next_char == '&' {
+                        self.bump();
+                        self.bump();
+                        return Some(Token::new(TokenKind::Add, 2, "&&"));
                     }
                     return None;
                 }

@@ -126,9 +126,6 @@ pub enum TokenKind {
 
     // Variable
 
-    /// "&"
-    Copy,
-
     /// "="
     Assign,
 
