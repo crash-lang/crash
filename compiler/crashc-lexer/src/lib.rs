@@ -320,6 +320,32 @@ impl Cursor<'_> {
         Some(Token::new(TokenKind::Identifier, end_pos - start_pos, &content))
     }
 
+    fn skip_line_comment(&mut self) {
+        self.bump();
+        self.bump();
+        while let Some(c) = self.current_char() {
+            if c == '\n' {
+                self.bump();
+                break;
+            }
+            self.bump();
+        }
+    }
+
+    fn skip_multi_line_comment(&mut self) {
+        self.bump();
+        self.bump();
+
+        while let Some(c) = self.current_char() {
+            if c == '*' && self.next() == '/' {
+                self.bump();
+                self.bump();
+                break;
+            }
+            self.bump();
+        }
+    }
+
     fn single_char_token(&mut self, kind: TokenKind, content: &str) -> Option<Token> {
         self.advance();
         Some(Token::new(kind, 1, content))
@@ -341,6 +367,18 @@ impl Cursor<'_> {
         self.skip_whitespace();
 
         if let Some(c) = self.current_char() {
+            if c == '/' {
+                let next = self.next();
+                if next == '/' {
+                    self.skip_line_comment();
+                    return self.tokenize_next();
+                }
+                if next == '*' {
+                    self.skip_multi_line_comment();
+                    return self.tokenize_next();
+                }
+            }
+
             return match c {
                 '"' => self.try_match_string_literal(),
                 '\'' => self.try_match_char_literal(),
