@@ -29,3 +29,13 @@ If you wish to contribute, please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 # Installation
 Please visit [our Website](https://crash-lang.org/install) for install instructions.
+
+# Hello world
+A Hello-world program in Crash:
+```crash
+main() {
+    info("Hello world!");
+}
+```
+
+Want more snippets? [Look here!](https://github.com/crash-lang/snippets)
