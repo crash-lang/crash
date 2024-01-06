@@ -431,7 +431,6 @@ impl Cursor<'_> {
                     return None;
                 }
 
-                // Keywords
                 'i' => {
                     if let Some(token) = self.try_match_keyword("if", TokenKind::If) {
                         return Some(token);
