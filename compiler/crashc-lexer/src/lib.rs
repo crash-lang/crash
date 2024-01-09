@@ -492,6 +492,9 @@ impl Cursor<'_> {
                     if let Some(token) = self.try_match_char_type() {
                         return Some(token);
                     }
+                    if let Some(token) = self.try_match_keyword("continue", TokenKind::Continue) {
+                        return Some(token);
+                    }
                     return self.try_match_identifier_literal();
                 }
                 'e' => {
@@ -528,10 +531,12 @@ impl Cursor<'_> {
                     return self.try_match_identifier_literal();
                 }
                 'b' => {
+                    if let Some(token) = self.try_match_keyword("break", TokenKind::Break) {
+                        return Some(token);
+                    }
                     if let Some(token) = self.try_match_boolean_type() {
                         return Some(token);
                     }
-
                     if let Some(token) = self.try_match_number_literal() {
                         return Some(token);
                     }

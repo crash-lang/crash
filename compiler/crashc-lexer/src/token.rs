@@ -147,6 +147,12 @@ pub enum TokenKind {
     /// "return" or "ret"
     Return,
 
+    /// "break"
+    Break,
+
+    /// "continue"
+    Continue,
+
 
     // File
 
