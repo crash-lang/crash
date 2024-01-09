@@ -22,7 +22,8 @@ pub struct Token {
 }
 
 impl Token {
-    pub(crate) fn new (kind: TokenKind, len: u32, content: &str) -> Token {
+
+    pub(crate) fn new (kind: TokenKind, len: u32, content: &str) -> Self {
         Token { kind, len, content: content.to_string() }
     }
 }
