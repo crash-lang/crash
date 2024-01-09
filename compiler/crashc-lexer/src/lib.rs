@@ -63,24 +63,11 @@ impl Cursor<'_> {
             ("i32", PrimitiveKind::I32),
             ("i64", PrimitiveKind::I64),
             ("i128", PrimitiveKind::I128),
-        ];
-
-        for (type_str, kind) in &integer_types {
-            if let Some(token) = self.try_match_keyword(type_str, TokenKind::Primitive { kind: *kind }) {
-                return Some(token);
-            }
-        }
-
-        None
-    }
-
-    fn try_match_unsigned_integer_type(&mut self) -> Option<Token> {
-        let integer_types = [
             ("u8", PrimitiveKind::U8),
             ("u16", PrimitiveKind::U16),
             ("u32", PrimitiveKind::U32),
             ("u64", PrimitiveKind::U64),
-            ("u128", PrimitiveKind::U128),
+            ("u128", PrimitiveKind::U128)
         ];
 
         for (type_str, kind) in &integer_types {
@@ -551,7 +538,7 @@ impl Cursor<'_> {
                     return self.try_match_identifier_literal();
                 }
                 'u' => {
-                    if let Some(token) = self.try_match_unsigned_integer_type() {
+                    if let Some(token) = self.try_match_integer_type() {
                         return Some(token);
                     }
                     return self.try_match_identifier_literal();
