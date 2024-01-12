@@ -177,7 +177,7 @@ impl Cursor<'_> {
             Some('o') => {
                 let next = self.next();
                 if !next.is_digit(8) {
-                    return None
+                    return None;
                 }
                 let base_char = self.current_char().unwrap();
                 self.bump();
@@ -198,25 +198,15 @@ impl Cursor<'_> {
                 'o' => 8,
                 'b' => 2,
                 '#' => 16,
-                 _ => 0
+                _ => 0
             }
         } else {
             radix = 10;
         }
 
-        while let Some(current_char) = self.current_char() {
-            if current_char == '_' {
-                self.bump();
-                continue;
-            }
-            if current_char.is_digit(radix) {
-                has_digit = true;
-                content.push(current_char);
-                self.bump();
-            } else {
-                break;
-            }
-        }
+        let ret = self.check_number_literal(has_digit, content, radix);
+        content = ret.0;
+        has_digit = ret.1;
 
         if !has_digit {
             return None;
@@ -232,37 +222,17 @@ impl Cursor<'_> {
         };
 
         if is_float {
-            while let Some(current_char) = self.current_char() {
-                if current_char == '_' {
-                    self.bump();
-                    continue;
-                }
-                if current_char.is_digit(radix) {
-                    has_digit = true;
-                    content.push(current_char);
-                    self.bump();
-                } else {
-                    break;
-                }
-            }
+            let ret = self.check_number_literal(has_digit, content, radix);
+            content = ret.0;
+            has_digit = ret.1;
         }
 
         if let Some('e') | Some('E') = self.current_char() {
             content.push(self.current_char().unwrap());
             self.bump();
-            while let Some(current_char) = self.current_char() {
-                if current_char == '_' {
-                    self.bump();
-                    continue;
-                }
-                if current_char.is_digit(radix) {
-                    has_digit = true;
-                    content.push(current_char);
-                    self.bump();
-                } else {
-                    break;
-                }
-            }
+            let ret = self.check_number_literal(has_digit, content, radix);
+            content = ret.0;
+            has_digit = ret.1;
         }
 
         let prefix = match base_prefix {
@@ -287,6 +257,24 @@ impl Cursor<'_> {
         };
 
         Some(Token::new(TokenKind::Literal { kind }, end_pos - start_pos, &content))
+    }
+
+    fn check_number_literal(&mut self, mut has_digit: bool, mut content: String, radix: u32) -> (String, bool) {
+        while let Some(current_char) = self.current_char() {
+            if current_char == '_' {
+                self.bump();
+                continue;
+            }
+            if current_char.is_digit(radix) {
+                has_digit = true;
+                content.push(current_char);
+                self.bump();
+            } else {
+                break;
+            }
+        }
+
+        (content, has_digit)
     }
 
     fn try_match_identifier_literal(&mut self) -> Option<Token> {
@@ -561,7 +549,7 @@ impl Cursor<'_> {
                 _ => {
                     return self.try_match_identifier_literal();
                 }
-            }
+            };
         }
         None
     }
