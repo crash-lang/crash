@@ -1,5 +1,5 @@
 # Jetbrains
-.idea
+.idea/*
 *.iml
 !.idea/icon.png
 
