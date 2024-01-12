@@ -1,3 +1,7 @@
+# Jetbrains
+.idea
+!.idea/icon.png
+
 # Cargo
 target
 Cargo.lock
