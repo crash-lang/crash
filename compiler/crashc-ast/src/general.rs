@@ -15,10 +15,34 @@
  *
  */
 
-mod expression;
-mod statement;
-mod class;
-mod modifier;
-mod types;
-mod general;
+use crate::expression::Expression;
+use crate::types::Type;
+
+pub struct Constant {
+    name: String,
+    typ: Type,
+    expr: Expression,
+}
+
+pub struct FuncParameter {
+    typ: Type,
+    name: String,
+    mutable: bool,
+}
+
+pub struct Generic {
+
+}
+
+impl Constant {
+    pub fn new(name: String, typ: Type, expr: Expression) -> Self {
+        Self { name, typ, expr }
+    }
+}
+
+impl FuncParameter {
+    pub fn new(typ: Type, name: String, mutable: bool) -> Self {
+        Self { typ, name, mutable }
+    }
+}
 

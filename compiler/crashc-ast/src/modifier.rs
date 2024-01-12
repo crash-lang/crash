@@ -15,10 +15,9 @@
  *
  */
 
-mod expression;
-mod statement;
-mod class;
-mod modifier;
-mod types;
-mod general;
-
+pub enum AccessModifier {
+    Public,
+    Private,
+    Protected,
+    Internal,
+}

@@ -61,13 +61,6 @@ boolean isAddUpEqualToFour(u32 first, u32 second) {
 }
 ```
 
-If you want to copy an instance of something, you can use an `&` in front of the type in parameters.
-```crash
-String removeSomething(&String aString, &String anotherString) {
-    return aString.replace(anotherString, aString);
-}
-```
-
 ## Fields/Variables/Constants
 
 Every variable is immutable by default. To make it mutable, we use the `mut` keyword.

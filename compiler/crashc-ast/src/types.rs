@@ -15,10 +15,33 @@
  *
  */
 
-mod expression;
-mod statement;
-mod class;
-mod modifier;
-mod types;
-mod general;
+pub struct Type {
+    typ: TypeType,
+    name: Option<String>,
+}
 
+/// We need this thing to differentiate a primitive type from an object like enum or class
+pub enum TypeType {
+    Obj,
+    Generic { extends: Vec<Type> }, 
+    U8,
+    I8,
+    U16,
+    I16,
+    U32,
+    I32,
+    U64,
+    I64,
+    U128,
+    I128,
+    F32,
+    F64,
+    Bool,
+    Char,
+}
+
+impl Type {
+    pub fn new(typ: TypeType, name: Option<String>) -> Self {
+        Type { typ, name }
+    }
+}
