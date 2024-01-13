@@ -20,10 +20,22 @@ mod token;
 mod test;
 
 use std::string::String;
+use crate::Base::*;
 pub use crate::cursor::Cursor;
+use crate::LiteralKind::*;
 pub use crate::ModifierKind::*;
+use crate::PrimitiveKind::*;
 pub use crate::token::*;
+use crate::TokenKind::*;
 
+#[macro_export]
+macro_rules! keyword {
+    ( $self:expr, $literal:expr , $kind:expr) => {
+        if let Some(token) = $self.try_match_keyword($literal, $kind) {
+            return Some(token);
+        }
+    };
+}
 
 pub fn tokenize_string(input: &str) -> Vec<Token> {
     let mut cursor = Cursor::new(input);
@@ -56,56 +68,6 @@ impl Cursor<'_> {
         None
     }
 
-    fn try_match_integer_type(&mut self) -> Option<Token> {
-        let integer_types = [
-            ("i8", PrimitiveKind::I8),
-            ("i16", PrimitiveKind::I16),
-            ("i32", PrimitiveKind::I32),
-            ("i64", PrimitiveKind::I64),
-            ("i128", PrimitiveKind::I128),
-            ("u8", PrimitiveKind::U8),
-            ("u16", PrimitiveKind::U16),
-            ("u32", PrimitiveKind::U32),
-            ("u64", PrimitiveKind::U64),
-            ("u128", PrimitiveKind::U128)
-        ];
-
-        for (type_str, kind) in &integer_types {
-            if let Some(token) = self.try_match_keyword(type_str, TokenKind::Primitive { kind: *kind }) {
-                return Some(token);
-            }
-        }
-
-        None
-    }
-
-    fn try_match_float_type(&mut self) -> Option<Token> {
-        if let Some(token) = self.try_match_keyword("f32", TokenKind::Primitive { kind: PrimitiveKind::F32 }) {
-            return Some(token);
-        }
-        if let Some(token) = self.try_match_keyword("f64", TokenKind::Primitive { kind: PrimitiveKind::F64 }) {
-            return Some(token);
-        }
-
-        None
-    }
-
-    fn try_match_boolean_type(&mut self) -> Option<Token> {
-        if let Some(token) = self.try_match_keyword("bool", TokenKind::Primitive { kind: PrimitiveKind::Bool }) {
-            return Some(token);
-        }
-
-        None
-    }
-
-    fn try_match_char_type(&mut self) -> Option<Token> {
-        if let Some(token) = self.try_match_keyword("char", TokenKind::Primitive { kind: PrimitiveKind::Char }) {
-            return Some(token);
-        }
-
-        None
-    }
-
     fn try_match_char_literal(&mut self) -> Option<Token> {
         if self.current_char() == Some('\'') {
             let start_pos = self.pos_within_token();
@@ -120,8 +82,8 @@ impl Cursor<'_> {
                     content.push('\'');
                     self.bump();
                     let end_pos = self.pos_within_token();
-                    return Some(Token::new(TokenKind::Literal {
-                        kind: LiteralKind::Character {
+                    return Some(Token::new(Literal {
+                        kind: Character {
                             terminated: true,
                         },
                     }, end_pos - start_pos, &content));
@@ -129,8 +91,8 @@ impl Cursor<'_> {
             }
         }
 
-        Some(Token::new(TokenKind::Literal {
-            kind: LiteralKind::Character {
+        Some(Token::new(Literal {
+            kind: Character {
                 terminated: false,
             },
         }, 2, "''"))
@@ -152,7 +114,7 @@ impl Cursor<'_> {
                     let mut chars = content.chars();
                     chars.next_back();
 
-                    return Some(Token::new(TokenKind::Literal {
+                    return Some(Token::new(Literal {
                         kind: LiteralKind::String {
                             terminated: true,
                         },
@@ -161,7 +123,7 @@ impl Cursor<'_> {
             }
         }
 
-        Some(Token::new(TokenKind::Literal {
+        Some(Token::new(Literal {
             kind: LiteralKind::String {
                 terminated: false,
             },
@@ -236,9 +198,9 @@ impl Cursor<'_> {
         }
 
         let prefix = match base_prefix {
-            Some('b') => Some(Base::Binary),
-            Some('o') => Some(Base::Octal),
-            Some('#') => Some(Base::Hexadecimal),
+            Some('b') => Some(Binary),
+            Some('o') => Some(Octal),
+            Some('#') => Some(Hexadecimal),
             _ => None,
         };
 
@@ -249,14 +211,14 @@ impl Cursor<'_> {
         let end_pos = self.pos_within_token();
 
         let kind = if let Some(base) = prefix {
-            LiteralKind::Integer { base }
+            Integer { base }
         } else if is_float {
-            LiteralKind::Float
+            Float
         } else {
-            LiteralKind::Integer { base: Base::Decimal }
+            Integer { base: Decimal }
         };
 
-        Some(Token::new(TokenKind::Literal { kind }, end_pos - start_pos, &content))
+        Some(Token::new(Literal { kind }, end_pos - start_pos, &content))
     }
 
     fn check_number_literal(&mut self, mut has_digit: bool, mut content: String, radix: u32) -> (String, bool) {
@@ -292,7 +254,7 @@ impl Cursor<'_> {
 
         let end_pos = self.pos_within_token();
 
-        Some(Token::new(TokenKind::Identifier, end_pos - start_pos, &content))
+        Some(Token::new(Identifier, end_pos - start_pos, &content))
     }
 
     fn skip_line_comment(&mut self) {
@@ -365,33 +327,33 @@ impl Cursor<'_> {
                     return self.try_match_identifier_literal();
                 }
                 '0'..='9' => self.try_match_number_literal(),
-                ';' => self.single_char_token(TokenKind::Semicolon, ";"),
-                '{' => self.single_char_token(TokenKind::OpenCurlyBrace, "{"),
-                '}' => self.single_char_token(TokenKind::CloseCurlyBrace, "}"),
-                '(' => self.single_char_token(TokenKind::OpenBrace, "("),
-                ')' => self.single_char_token(TokenKind::CloseBrace, ")"),
-                '[' => self.single_char_token(TokenKind::OpenSquareBrace, "["),
-                ']' => self.single_char_token(TokenKind::CloseSquareBrace, "]"),
-                ',' => self.single_char_token(TokenKind::Comma, ","),
-                '?' => self.single_char_token(TokenKind::Question, "?"),
-                ':' => self.single_char_token(TokenKind::Colon, ":"),
-                '+' => self.single_char_token(TokenKind::Add, "+"),
-                '-' => self.single_char_token(TokenKind::Subtract, "-"),
-                '*' => self.single_char_token(TokenKind::Multiply, "*"),
-                '/' => self.single_char_token(TokenKind::Divide, "/"),
-                '%' => self.single_char_token(TokenKind::Modulus, "%"),
+                ';' => self.single_char_token(Semicolon, ";"),
+                '{' => self.single_char_token(OpenCurlyBrace, "{"),
+                '}' => self.single_char_token(CloseCurlyBrace, "}"),
+                '(' => self.single_char_token(OpenBrace, "("),
+                ')' => self.single_char_token(CloseBrace, ")"),
+                '[' => self.single_char_token(OpenSquareBrace, "["),
+                ']' => self.single_char_token(CloseSquareBrace, "]"),
+                ',' => self.single_char_token(Comma, ","),
+                '?' => self.single_char_token(Question, "?"),
+                ':' => self.single_char_token(Colon, ":"),
+                '+' => self.single_char_token(Add, "+"),
+                '-' => self.single_char_token(Subtract, "-"),
+                '*' => self.single_char_token(Multiply, "*"),
+                '/' => self.single_char_token(Divide, "/"),
+                '%' => self.single_char_token(Modulus, "%"),
 
-                '=' => self.double_char_token(TokenKind::Assign, TokenKind::Equals, '=', "=", "=="),
-                '!' => self.double_char_token(TokenKind::Exclamation, TokenKind::NotEquals, '=', "!", "!="),
-                '>' => self.double_char_token(TokenKind::Greater, TokenKind::GreaterOrEqual, '=', ">", ">="),
-                '<' => self.double_char_token(TokenKind::Less, TokenKind::LessOrEqual, '=', "<", "<="),
+                '=' => self.double_char_token(Assign, Equals, '=', "=", "=="),
+                '!' => self.double_char_token(Exclamation, NotEquals, '=', "!", "!="),
+                '>' => self.double_char_token(Greater, GreaterOrEqual, '=', ">", ">="),
+                '<' => self.double_char_token(Less, LessOrEqual, '=', "<", "<="),
 
                 '|' => {
                     let next_char = self.next();
                     if next_char == '|' {
                         self.bump();
                         self.bump();
-                        return Some(Token::new(TokenKind::Or, 2, "||"));
+                        return Some(Token::new(Or, 2, "||"));
                     }
                     return None;
                 }
@@ -401,149 +363,84 @@ impl Cursor<'_> {
                     if next_char == '&' {
                         self.bump();
                         self.bump();
-                        return Some(Token::new(TokenKind::Add, 2, "&&"));
+                        return Some(Token::new(Add, 2, "&&"));
                     }
                     return None;
                 }
 
                 'i' => {
-                    if let Some(token) = self.try_match_keyword("if", TokenKind::If) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("interface", TokenKind::Interface) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("import", TokenKind::Import) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("intern",
-                                                                TokenKind::AccessModifier {
-                                                                    kind: Internal
-                                                                }) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_integer_type() {
-                        return Some(token);
-                    }
+                    keyword!(self, "if", If);
+                    keyword!(self, "interface", Interface);
+                    keyword!(self, "import", Import);
+                    keyword!(self, "intern", AccessModifier { kind: Internal });
+                    keyword!(self, "i8", Primitive { kind: I8 });
+                    keyword!(self, "i16", Primitive { kind: I16 });
+                    keyword!(self, "i32", Primitive { kind: I32 });
+                    keyword!(self, "i64", Primitive { kind: I64 });
+                    keyword!(self, "i128", Primitive { kind: I128 });
                     return self.try_match_identifier_literal();
                 }
                 's' => {
-                    if let Some(token) = self.try_match_keyword("switch", TokenKind::Switch) {
-                        return Some(token);
-                    }
+                    keyword!(self, "switch", Switch);
                     return self.try_match_identifier_literal();
                 }
                 'm' => {
-                    if let Some(token) = self.try_match_keyword("match", TokenKind::Match) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("mut", TokenKind::Mutable) {
-                        return Some(token);
-                    }
+                    keyword!(self, "match", Match);
+                    keyword!(self, "mut", Mutable);
                     return self.try_match_identifier_literal();
                 }
                 'l' => {
-                    if let Some(token) = self.try_match_keyword("loop", TokenKind::Loop) {
-                        return Some(token);
-                    }
+                    keyword!(self, "loop", Loop);
                     return self.try_match_identifier_literal();
                 }
                 'f' => {
-                    if let Some(token) = self.try_match_keyword("for", TokenKind::For) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_float_type() {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("false", TokenKind::Literal {
-                        kind: LiteralKind::Boolean {
-                            val: false
-                        }
-                    }) {
-                        return Some(token);
-                    }
+                    keyword!(self, "for", For);
+                    keyword!(self, "false", Literal { kind: Boolean { val: false } });
+                    keyword!(self, "f32", Primitive { kind: F32 });
+                    keyword!(self, "f64", Primitive { kind: F64 });
                     return self.try_match_identifier_literal();
                 }
                 'r' => {
-                    if let Some(token) = self.try_match_keyword("return", TokenKind::Return) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("ret", TokenKind::Return) {
-                        return Some(token);
-                    }
+                    keyword!(self, "return", Return);
+                    keyword!(self, "ret", Return);
                     return self.try_match_identifier_literal();
                 }
                 'c' => {
-                    if let Some(token) = self.try_match_keyword("class", TokenKind::Class) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_char_type() {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("continue", TokenKind::Continue) {
-                        return Some(token);
-                    }
+                    keyword!(self, "class", Class);
+                    keyword!(self, "char", Primitive { kind: Char });
+                    keyword!(self, "continue", Continue);
                     return self.try_match_identifier_literal();
                 }
                 'e' => {
-                    if let Some(token) = self.try_match_keyword("enum", TokenKind::Enum) {
-                        return Some(token);
-                    }
+                    keyword!(self, "enum", Enum);
                     return self.try_match_identifier_literal();
                 }
                 'p' => {
-                    if let Some(token) = self.try_match_keyword("public",
-                                                                TokenKind::AccessModifier {
-                                                                    kind: Public
-                                                                }) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("protected",
-                                                                TokenKind::AccessModifier {
-                                                                    kind: Protected
-                                                                }) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("pub",
-                                                                TokenKind::AccessModifier {
-                                                                    kind: Public
-                                                                }) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_keyword("prot",
-                                                                TokenKind::AccessModifier {
-                                                                    kind: Protected
-                                                                }) {
-                        return Some(token);
-                    }
+                    keyword!(self, "public", AccessModifier { kind: Public });
+                    keyword!(self, "pub", AccessModifier { kind: Public });
+                    keyword!(self, "protected", AccessModifier { kind: Protected });
+                    keyword!(self, "prot", AccessModifier { kind: Protected });
                     return self.try_match_identifier_literal();
                 }
                 'b' => {
-                    if let Some(token) = self.try_match_keyword("break", TokenKind::Break) {
-                        return Some(token);
-                    }
-                    if let Some(token) = self.try_match_boolean_type() {
-                        return Some(token);
-                    }
+                    keyword!(self, "break", Break);
+                    keyword!(self, "boolean", Primitive { kind: Bool });
+                    keyword!(self, "bool", Primitive { kind: Bool });
                     if let Some(token) = self.try_match_number_literal() {
                         return Some(token);
                     }
                     return self.try_match_identifier_literal();
                 }
                 'u' => {
-                    if let Some(token) = self.try_match_integer_type() {
-                        return Some(token);
-                    }
+                    keyword!(self, "u8", Primitive { kind: U8 });
+                    keyword!(self, "u16", Primitive { kind: U16 });
+                    keyword!(self, "u32", Primitive { kind: U32 });
+                    keyword!(self, "u64", Primitive { kind: U64 });
+                    keyword!(self, "u128", Primitive { kind: U128 });
                     return self.try_match_identifier_literal();
                 }
                 't' => {
-                    if let Some(token) = self.try_match_keyword("true", TokenKind::Literal {
-                        kind: LiteralKind::Boolean {
-                            val: true
-                        }
-                    }) {
-                        return Some(token);
-                    }
+                    keyword!(self, "true", Literal { kind: Boolean { val: true } });
                     return self.try_match_identifier_literal();
                 }
                 _ => {
