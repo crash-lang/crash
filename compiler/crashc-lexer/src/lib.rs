@@ -288,6 +288,7 @@ impl Cursor<'_> {
         Some(Token::new(kind, 1, content))
     }
 
+    // Returns option, even if unnecessary, to reduce code below. It works fine >.<
     fn double_char_token(&mut self, kind1: TokenKind, kind2: TokenKind, expected: char, val1: &str, val2: &str) -> Option<Token> {
         let next_char = self.next();
         if next_char == expected {
