@@ -345,28 +345,61 @@ impl Cursor<'_> {
 
                 '=' => self.double_char_token(Assign, Equals, '=', "=", "=="),
                 '!' => self.double_char_token(Exclamation, NotEquals, '=', "!", "!="),
-                '>' => self.double_char_token(Greater, GreaterOrEqual, '=', ">", ">="),
-                '<' => self.double_char_token(Less, LessOrEqual, '=', "<", "<="),
 
-                '|' => {
+                '>' => {
                     let next_char = self.next();
-                    if next_char == '|' {
+
+                    if next_char == '=' {
                         self.bump();
                         self.bump();
-                        return Some(Token::new(Or, 2, "||"));
+                        return Some(Token::new(GreaterOrEqual, 2, ">="));
                     }
-                    return None;
+
+                    if next_char == '>' {
+                        self.bump();
+
+                        let next_next_char = self.next();
+
+                        if next_next_char == '>' {
+                            self.bump();
+                            self.bump();
+                            return Some(Token::new(UnsignedRightShift, 3, ">>>"));
+                        }
+
+                        self.bump();
+                        return Some(Token::new(RightShift, 2, ">>"));
+                    }
+
+                    self.bump();
+
+                    return Some(Token::new(Greater, 1, ">"));
                 }
 
-                '&' => {
+                '<' => {
                     let next_char = self.next();
-                    if next_char == '&' {
+
+                    if next_char == '=' {
                         self.bump();
                         self.bump();
-                        return Some(Token::new(Add, 2, "&&"));
+                        return Some(Token::new(LessOrEqual, 2, "<="));
                     }
-                    return None;
+
+                    if next_char == '<' {
+                        self.bump();
+                        self.bump();
+                        return Some(Token::new(LeftShift, 2, "<<"));
+                    }
+
+                    self.bump();
+
+                    return Some(Token::new(Less, 1, "<"));
                 }
+
+                '|' => self.double_char_token(BitwiseOr, Or, '|', "|", "||"),
+                '&' => self.double_char_token(BitwiseAnd, And, '&', "&", "&&"),
+
+                '^' => self.single_char_token(BitwiseXor, "^"),
+                '~' => self.single_char_token(BitwiseComplement, "~"),
 
                 'i' => {
                     keyword!(self, "if", If);

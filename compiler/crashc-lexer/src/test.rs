@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+use std::cmp::Ordering::Equal;
 use crate::*;
 
 #[test]
@@ -118,18 +119,20 @@ fn test_tokenize_string_int_literals() {
 }
 
 #[test]
-fn test_tokenize_string_comments() {
+fn test_tokenize_operators() {
     let tokens = tokenize_string(r"
-        // Hi I'm a comment
-        i32 234.4
-        /*
-            Hi,
-            Im a multi-
-            line comment
-            u32
-            u64
-        */
-        u32 #fff434
+        ==
+        !=
+        ||
+        &&
+        |
+        &
+        <<
+        >>
+        <
+        >
+        |
+        >>>
     ");
 
     let mut index = 0;
@@ -139,24 +142,64 @@ fn test_tokenize_string_comments() {
         let kind = tok.kind;
         match index {
             0 => {
-                assert_eq!(content, "i32");
-                assert_eq!(len, 3);
-                assert_eq!(kind, Primitive { kind: I32 });
+                assert_eq!(content, "==");
+                assert_eq!(len, 2);
+                assert_eq!(kind, Equals);
             }
             1 => {
-                assert_eq!(content, "234.4");
-                assert_eq!(len, 5);
-                assert_eq!(kind, Literal { kind: Float });
+                assert_eq!(content, "!=");
+                assert_eq!(len, 2);
+                assert_eq!(kind, NotEquals);
             }
             2 => {
-                assert_eq!(content, "u32");
-                assert_eq!(len, 3);
-                assert_eq!(kind, Primitive { kind: U32 });
+                assert_eq!(content, "||");
+                assert_eq!(len, 2);
+                assert_eq!(kind, Or);
             }
             3 => {
-                assert_eq!(content, "fff434");
-                assert_eq!(len, 7);
-                assert_eq!(kind, Literal { kind: Integer { base: Hexadecimal } });
+                assert_eq!(content, "&&");
+                assert_eq!(len, 2);
+                assert_eq!(kind, And);
+            }
+            4 => {
+                assert_eq!(content, "|");
+                assert_eq!(len, 1);
+                assert_eq!(kind, BitwiseOr);
+            }
+            5 => {
+                assert_eq!(content, "&");
+                assert_eq!(len, 1);
+                assert_eq!(kind, BitwiseAnd);
+            }
+            6 => {
+                assert_eq!(content, "<<");
+                assert_eq!(len, 2);
+                assert_eq!(kind, LeftShift);
+            }
+            7 => {
+                assert_eq!(content, ">>");
+                assert_eq!(len, 2);
+                assert_eq!(kind, RightShift);
+            }
+            8 => {
+                assert_eq!(content, "<");
+                assert_eq!(len, 1);
+                assert_eq!(kind, Less);
+            }
+            9 => {
+                assert_eq!(content, ">");
+                assert_eq!(len, 1);
+                assert_eq!(kind, Greater);
+            }
+            10 => {
+                assert_eq!(content, "|");
+                assert_eq!(len, 1);
+                assert_eq!(kind, BitwiseOr);
+            }
+            11 => {
+                assert_eq!(content, ">>>");
+                assert_eq!(len, 3);
+                assert_eq!(kind, UnsignedRightShift);
             }
             _ => {
                 panic!("We don't have enough things tokenized");
@@ -171,8 +214,6 @@ fn test_tokenize_string_symbols() {
     let tokens = tokenize_string(r"
         ;{([)]},:?
     ");
-
-    println!("{:?}", tokens);
 
     let mut index = 0;
     for tok in tokens {

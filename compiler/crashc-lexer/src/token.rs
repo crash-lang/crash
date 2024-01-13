@@ -115,6 +115,30 @@ pub enum TokenKind {
 
     /// "||"
     Or,
+    
+    
+    // Bitwise and Shift operators
+    
+    /// "|"
+    BitwiseOr,
+    
+    /// "&"
+    BitwiseAnd,
+    
+    /// "^"
+    BitwiseXor,
+    
+    /// "~"
+    BitwiseComplement,
+    
+    /// "<<"
+    LeftShift,
+    
+    /// Signed ">>"
+    RightShift,
+
+    /// ">>>"
+    UnsignedRightShift,
 
 
     // Variable
