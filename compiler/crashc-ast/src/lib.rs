@@ -15,10 +15,27 @@
  *
  */
 
-mod expression;
-mod statement;
-mod class;
-mod modifier;
-mod types;
-mod general;
+use crashc_lexer::Token;
+use crate::decl::module::ModuleDecl;
+use crate::parser::class::parse_class;
+use crate::parser::constants::parse_constants;
+use crate::parser::enumeration::parse_enum;
+use crate::parser::functions::parse_functions;
+use crate::parser::import::parse_imports;
 
+mod decl;
+mod parser;
+
+pub fn build_module_decl(tokens: Vec<Token>, module_name: String) -> ModuleDecl {
+    let iter = tokens.iter();
+
+    ModuleDecl::new(
+        module_name,
+        parse_imports(iter.clone()),
+        parse_constants(iter.clone()),
+        parse_functions(iter.clone()),
+        parse_class(iter.clone()),
+        parse_enum(iter.clone()),
+        None
+    )
+}

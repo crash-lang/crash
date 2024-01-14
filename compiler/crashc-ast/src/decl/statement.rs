@@ -15,29 +15,29 @@
  *
  */
 
-use crate::expression::Expression;
-use crate::types::Type;
+use crate::decl::expression::ExpressionDecl;
+use crate::decl::types::Type;
 
-pub enum Statement {
-    If { expr: Expression, code: Vec<Statement> },
-    Switch { expr: Expression, bodies: Vec<SwitchBody> },
-    Match { expr: Expression, bodies: Vec<MatchBody> },
-    Loop { code: Vec<Statement> },
-    Return { expr: Option<Expression> },
+pub enum StatementDecl {
+    If { expr: ExpressionDecl, code: Vec<StatementDecl> },
+    Switch { expr: ExpressionDecl, bodies: Vec<SwitchBodyDecl> },
+    Match { expr: ExpressionDecl, bodies: Vec<MatchBodyDecl> },
+    Loop { code: Vec<StatementDecl> },
+    Return { expr: Option<ExpressionDecl> },
     Break,
     Continue,
-    Throw { expr: Expression },
-    Variable { name: String, typ: Type, mutable: bool, expr: Expression },
-    Expression { expr: Expression },
+    Throw { expr: ExpressionDecl },
+    Variable { name: String, typ: Type, mutable: bool, expr: ExpressionDecl },
+    Expression { expr: ExpressionDecl },
 }
 
-pub struct SwitchBody {
+pub struct SwitchBodyDecl {
     target: String,
-    code: Vec<Statement>,
+    code: Vec<StatementDecl>,
 }
 
-pub struct MatchBody {
+pub struct MatchBodyDecl {
     target: String,
     params: Vec<String>,
-    code: Vec<Statement>,
+    code: Vec<StatementDecl>,
 }

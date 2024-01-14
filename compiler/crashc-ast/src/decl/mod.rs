@@ -15,9 +15,12 @@
  *
  */
 
-pub enum AccessModifier {
-    Public,
-    Private,
-    Protected,
-    Internal,
-}
+pub mod class;
+pub mod enumeration;
+pub mod expression;
+pub mod misc;
+pub mod statement;
+pub mod module;
+pub mod types;
+pub mod modifier;
+pub mod interface;

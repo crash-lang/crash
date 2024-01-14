@@ -15,34 +15,11 @@
  *
  */
 
-use crate::expression::Expression;
-use crate::types::Type;
+use std::slice::Iter;
+use crashc_lexer::Token;
+use crate::decl::enumeration::EnumDecl;
 
-pub struct Constant {
-    name: String,
-    typ: Type,
-    expr: Expression,
+pub fn parse_enum(tokens: Iter<Token>) -> Option<EnumDecl> {
+
+    None
 }
-
-pub struct FuncParameter {
-    typ: Type,
-    name: String,
-    mutable: bool,
-}
-
-pub struct Generic {
-
-}
-
-impl Constant {
-    pub fn new(name: String, typ: Type, expr: Expression) -> Self {
-        Self { name, typ, expr }
-    }
-}
-
-impl FuncParameter {
-    pub fn new(typ: Type, name: String, mutable: bool) -> Self {
-        Self { typ, name, mutable }
-    }
-}
-
