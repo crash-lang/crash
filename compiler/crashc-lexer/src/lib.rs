@@ -405,6 +405,7 @@ impl Cursor<'_> {
                 'i' => {
                     keyword!(self, "if", If);
                     keyword!(self, "interface", Interface);
+                    keyword!(self, "implements", Implements);
                     keyword!(self, "import", Import);
                     keyword!(self, "intern", AccessModifier { kind: Internal });
                     keyword!(self, "i8", Primitive { kind: I8 });

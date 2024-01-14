@@ -193,6 +193,9 @@ pub enum TokenKind {
     /// "import"
     Import,
 
+    /// "implements"
+    Implements,
+
     AccessModifier { kind: ModifierKind },
 
     Identifier,
