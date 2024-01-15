@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-use std::cmp::Ordering::Equal;
 use crate::*;
 
 #[test]

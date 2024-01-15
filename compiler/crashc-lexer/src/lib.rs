@@ -171,7 +171,7 @@ impl Cursor<'_> {
         has_digit = ret.1;
 
         if !has_digit {
-            return None;
+            panic!("Invalid number at {}", self.pos_within_token())
         }
 
         let is_float = match self.current_char() {
@@ -205,7 +205,7 @@ impl Cursor<'_> {
         };
 
         if !has_digit {
-            return None;
+            panic!("Missing floating point after comma at {}", self.pos_within_token())
         }
 
         let end_pos = self.pos_within_token();
@@ -273,14 +273,23 @@ impl Cursor<'_> {
         self.bump();
         self.bump();
 
+        let mut closed = false;
+
         while let Some(c) = self.current_char() {
             if c == '*' && self.next() == '/' {
                 self.bump();
                 self.bump();
+                closed = true;
                 break;
             }
             self.bump();
         }
+
+        if closed {
+            return;
+        }
+
+        panic!("Unclosed comment at {}", self.pos_within_token())
     }
 
     fn single_char_token(&mut self, kind: TokenKind, content: &str) -> Option<Token> {
@@ -412,7 +421,6 @@ impl Cursor<'_> {
                     keyword!(self, "i16", Primitive { kind: I16 });
                     keyword!(self, "i32", Primitive { kind: I32 });
                     keyword!(self, "i64", Primitive { kind: I64 });
-                    keyword!(self, "i128", Primitive { kind: I128 });
                     return self.try_match_identifier_literal();
                 }
                 's' => {
@@ -471,7 +479,6 @@ impl Cursor<'_> {
                     keyword!(self, "u16", Primitive { kind: U16 });
                     keyword!(self, "u32", Primitive { kind: U32 });
                     keyword!(self, "u64", Primitive { kind: U64 });
-                    keyword!(self, "u128", Primitive { kind: U128 });
                     return self.try_match_identifier_literal();
                 }
                 't' => {
