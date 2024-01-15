@@ -420,11 +420,13 @@ impl Cursor<'_> {
                     keyword!(self, "i8", Primitive { kind: I8 });
                     keyword!(self, "i16", Primitive { kind: I16 });
                     keyword!(self, "i32", Primitive { kind: I32 });
+                    keyword!(self, "int", Primitive { kind: I32 });
                     keyword!(self, "i64", Primitive { kind: I64 });
                     return self.try_match_identifier_literal();
                 }
                 's' => {
                     keyword!(self, "switch", Switch);
+                    keyword!(self, "short", Primitive { kind: I16 });
                     return self.try_match_identifier_literal();
                 }
                 'm' => {
@@ -434,13 +436,19 @@ impl Cursor<'_> {
                 }
                 'l' => {
                     keyword!(self, "loop", Loop);
+                    keyword!(self, "long", Primitive { kind: I64 });
                     return self.try_match_identifier_literal();
                 }
                 'f' => {
                     keyword!(self, "for", For);
                     keyword!(self, "false", Literal { kind: Boolean { val: false } });
                     keyword!(self, "f32", Primitive { kind: F32 });
+                    keyword!(self, "float", Primitive { kind: F32 });
                     keyword!(self, "f64", Primitive { kind: F64 });
+                    return self.try_match_identifier_literal();
+                }
+                'd' => {
+                    keyword!(self, "double", Primitive { kind: F64 });
                     return self.try_match_identifier_literal();
                 }
                 'r' => {
@@ -469,6 +477,7 @@ impl Cursor<'_> {
                     keyword!(self, "break", Break);
                     keyword!(self, "boolean", Primitive { kind: Bool });
                     keyword!(self, "bool", Primitive { kind: Bool });
+                    keyword!(self, "byte", Primitive { kind: I8 });
                     if let Some(token) = self.try_match_number_literal() {
                         return Some(token);
                     }
