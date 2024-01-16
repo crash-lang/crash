@@ -16,7 +16,7 @@
  */
 
 use std::slice::Iter;
-use crashc_lexer::Token;
+use crashc_lexer::token::Token;
 use crate::decl::enumeration::EnumDecl;
 
 pub fn parse_enum(tokens: Iter<Token>) -> Option<EnumDecl> {

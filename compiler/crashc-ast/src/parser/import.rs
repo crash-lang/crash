@@ -16,7 +16,7 @@
  */
 
 use std::slice::Iter;
-use crashc_lexer::Token;
+use crashc_lexer::token::Token;
 
 pub fn parse_imports(tokens: Iter<Token>) -> Vec<String> {
     let imports = Vec::new();

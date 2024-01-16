@@ -15,7 +15,7 @@
  *
  */
 
-use crashc_lexer::Token;
+use crashc_lexer::token::Token;
 use crate::decl::module::ModuleDecl;
 use crate::parser::class::parse_class;
 use crate::parser::constants::parse_constants;

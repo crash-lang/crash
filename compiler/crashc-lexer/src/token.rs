@@ -278,10 +278,10 @@ pub enum LiteralKind {
     Float,
 
     /// "'a'" | "'b'"
-    Character { terminated: bool },
+    Character,
 
     /// ""Hello world""
-    String { terminated: bool },
+    String,
 
     /// "true" or "false"
     Boolean {

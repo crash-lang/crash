@@ -16,7 +16,7 @@
  */
 
 use std::slice::Iter;
-use crashc_lexer::Token;
+use crashc_lexer::token::Token;
 use crate::decl::misc::ConstantDecl;
 
 pub fn parse_constants(tokens: Iter<Token>) -> Vec<ConstantDecl> {

@@ -16,7 +16,7 @@
  */
 
 use std::slice::Iter;
-use crashc_lexer::Token;
+use crashc_lexer::token::Token;
 use crate::decl::module::FunctionDecl;
 
 pub fn parse_functions(tokens: Iter<Token>) -> Vec<FunctionDecl> {

@@ -12,13 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-pub mod tokenizer;
-pub mod token;
+/// Returns (row, column)
+pub fn get_pos(target_index: u32, input: String) -> (usize, usize) {
+    let mut total_index = 0;
+    let mut row = 0;
+    let mut col = 0;
 
-mod cursor;
-#[cfg(test)]
-mod test;
-mod macros;
-mod utils;
+    let lines: Vec<&str> = input.lines().collect();
+
+    for (i, line) in lines.iter().enumerate() {
+        row = i + 1;
+
+        for (j, _) in line.chars().enumerate() {
+            col = j + 1;
+            if total_index == target_index {
+                break;
+            }
+
+            total_index += 1;
+        }
+    }
+
+    (row, col)
+}

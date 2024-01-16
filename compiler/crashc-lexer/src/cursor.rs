@@ -59,7 +59,7 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub(crate) fn skip_whitespace(&mut self) {
+    pub fn skip_whitespace(&mut self) {
         while let Some(c) = self.current_char() {
             if !is_whitespace(c) {
                 break
@@ -90,5 +90,9 @@ impl<'a> Cursor<'a> {
 
     pub fn chars(&self) -> &Chars<'a> {
         &self.chars
+    }
+
+    pub fn len_remaining(&self) -> usize {
+        self.len_remaining
     }
 }

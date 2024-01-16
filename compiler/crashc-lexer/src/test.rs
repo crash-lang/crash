@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-use crate::*;
+
+use crate::token::Base::*;
+use crate::token::TokenKind::*;
+use crate::token::LiteralKind;
+use crate::token::LiteralKind::*;
+use crate::tokenizer::Tokenizer;
 
 #[test]
-fn test_tokenize_string_string_literal() {
-    let tokens = tokenize_string("\"Hello world\" \"Hey you\"");
+fn test_tokenize_string_some_literals() {
+    let tokens = Tokenizer::new("\"Hello world\" \"Hey you\" 'a'")
+        .tokenize();
+
     let mut index = 0;
     for tok in tokens {
         let content = tok.content;
@@ -28,12 +35,17 @@ fn test_tokenize_string_string_literal() {
             0 => {
                 assert_eq!(content, "Hello world");
                 assert_eq!(len, 13);
-                assert_eq!(kind, Literal { kind: LiteralKind::String { terminated: true } });
+                assert_eq!(kind, Literal { kind: String });
             }
             1 => {
                 assert_eq!(content, "Hey you");
                 assert_eq!(len, 9);
-                assert_eq!(kind, Literal { kind: LiteralKind::String { terminated: true } });
+                assert_eq!(kind, Literal { kind: String });
+            }
+            2 => {
+                assert_eq!(content, "a");
+                assert_eq!(len, 3);
+                assert_eq!(kind, Literal { kind: Character })
             }
             _ => {
                 panic!("We don't have enough strings tokenized");
@@ -45,10 +57,10 @@ fn test_tokenize_string_string_literal() {
 
 #[test]
 fn test_tokenize_string_float_literals() {
-    let tokens = tokenize_string(r"
+    let tokens = Tokenizer::new(r"
         12.5_6
         34.6_356_56
-    ");
+    ").tokenize();
 
     let mut index = 0;
     for tok in tokens {
@@ -76,12 +88,12 @@ fn test_tokenize_string_float_literals() {
 
 #[test]
 fn test_tokenize_string_int_literals() {
-    let tokens = tokenize_string(r"
+    let tokens = Tokenizer::new(r"
         345_65_6
         #3_4546f
         o456
         b000_10000
-    ");
+    ").tokenize();
 
     let mut index = 0;
     for tok in tokens {
@@ -119,7 +131,7 @@ fn test_tokenize_string_int_literals() {
 
 #[test]
 fn test_tokenize_operators() {
-    let tokens = tokenize_string(r"
+    let tokens = Tokenizer::new(r"
         ==
         !=
         ||
@@ -132,7 +144,7 @@ fn test_tokenize_operators() {
         >
         |
         >>>
-    ");
+    ").tokenize();
 
     let mut index = 0;
     for tok in tokens {
@@ -210,9 +222,9 @@ fn test_tokenize_operators() {
 
 #[test]
 fn test_tokenize_string_symbols() {
-    let tokens = tokenize_string(r"
+    let tokens = Tokenizer::new(r"
         ;{([)]},:?
-    ");
+    ").tokenize();
 
     let mut index = 0;
     for tok in tokens {
