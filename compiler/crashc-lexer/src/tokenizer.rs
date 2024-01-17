@@ -30,7 +30,7 @@ use crate::utils::*;
 
 pub struct Tokenizer<'a> {
     input: &'a str,
-    pub cursor: Mutex<Cursor<'a>>,
+    cursor: Mutex<Cursor<'a>>,
 }
 
 impl<'a> Tokenizer<'a> {
@@ -286,7 +286,7 @@ impl<'a> Tokenizer<'a> {
 
         loop {
             if let Some(current_char) = cursor.current_char() {
-                if current_char.is_alphabetic() || current_char == '.' {
+                if current_char.is_alphabetic() || current_char == '.' || current_char == ':' {
                     content.push(current_char);
                     cursor.bump();
                 } else {

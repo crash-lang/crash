@@ -16,7 +16,7 @@
 
 use std::str::Chars;
 
-pub struct Cursor<'a> {
+pub(crate) struct Cursor<'a> {
     len_remaining: usize,
     chars: Chars<'a>,
     prev: char
@@ -36,7 +36,7 @@ pub(crate) fn is_whitespace(c: char) -> bool {
 
 impl<'a> Cursor<'a> {
 
-    pub fn new(input: &'a str) -> Cursor<'a> {
+    pub(crate) fn new(input: &'a str) -> Cursor<'a> {
         Cursor {
             len_remaining: input.len(),
             chars: input.chars(),
@@ -44,7 +44,7 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub fn as_str(&self) -> &'a str {
+    pub(crate) fn as_str(&self) -> &'a str {
         self.chars.as_str()
     }
 
@@ -88,11 +88,11 @@ impl<'a> Cursor<'a> {
         Some(c)
     }
 
-    pub fn chars(&self) -> &Chars<'a> {
+    pub(crate) fn chars(&self) -> &Chars<'a> {
         &self.chars
     }
 
-    pub fn len_remaining(&self) -> usize {
+    pub(crate) fn len_remaining(&self) -> usize {
         self.len_remaining
     }
 }

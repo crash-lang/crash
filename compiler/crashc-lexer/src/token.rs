@@ -16,15 +16,27 @@
 
 #[derive(Debug)]
 pub struct Token {
-    pub kind: TokenKind,
-    pub len: u32,
-    pub content: String
+    kind: TokenKind,
+    len: u32,
+    content: String
 }
 
 impl Token {
 
-    pub(crate) fn new (kind: TokenKind, len: u32, content: &str) -> Self {
+    pub fn new (kind: TokenKind, len: u32, content: &str) -> Self {
         Token { kind, len, content: content.to_string() }
+    }
+
+    pub fn kind(&self) -> TokenKind {
+        self.kind
+    }
+    
+    pub fn len(&self) -> u32 {
+        self.len
+    }
+    
+    pub fn content(&self) -> &str {
+        &self.content
     }
 }
 
