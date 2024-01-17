@@ -15,9 +15,70 @@
  *
  */
 
+use std::slice::Iter;
+use crashc_lexer::token::{Token, TokenKind};
+
 pub(crate) mod import;
 pub(crate) mod class;
 pub(crate) mod functions;
 pub(crate) mod constants;
 pub(crate) mod enumeration;
+mod macros;
 
+pub struct Cursor<'a> {
+    len_remaining: usize,
+    tokens: Iter<'a, Token>,
+    prev: &'a Token
+}
+
+const EOF_TOKEN: &Token = &Token::new(TokenKind::Eof, 0, "");
+
+impl<'a> Cursor<'a> {
+
+    pub(crate) fn new(tokens: Iter<Token>) -> Cursor<'a> {
+        Cursor {
+            len_remaining: tokens.len(),
+            tokens: tokens,
+            prev: EOF_TOKEN
+        }
+    }
+
+    pub(crate) fn current_tok(&self) -> Option<&Token> {
+        self.tokens.clone().next()
+    }
+
+    pub(crate) fn advance(&mut self) {
+        if let Some(tok) = self.tokens.next() {
+            self.prev = tok;
+            self.len_remaining -= 1;
+        }
+    }
+
+    pub(crate) fn next(&self) -> &Token {
+        let mut iterator = self.tokens.clone();
+        iterator.next();
+        iterator.next().unwrap_or(EOF_TOKEN)
+    }
+
+    pub(crate) fn is_eof(&self) -> bool {
+        self.tokens.len() == 0
+    }
+
+    pub(crate) fn pos_within_token(&self) -> u32 {
+        (self.len_remaining - self.tokens.len()) as u32
+    }
+
+    pub(crate) fn bump(&mut self) -> Option<&Token> {
+        let tok = self.tokens.next()?;
+        self.prev = tok;
+        Some(tok)
+    }
+
+    pub(crate) fn len_remaining(&self) -> usize {
+        self.len_remaining
+    }
+
+    pub(crate) fn prev(&self) -> &'a Token {
+        self.prev
+    }
+}

@@ -15,11 +15,91 @@
  *
  */
 
-use std::slice::Iter;
-use crashc_lexer::token::Token;
-use crate::decl::class::ClassDecl;
+use crashc_lexer::token::TokenKind::*;
+use crate::current_tok;
+use crate::decl::class::{ClassDecl, ConstructorDecl, FieldDecl, MethodDecl};
+use crate::decl::misc::Generic;
+use crate::parser::Cursor;
 
-pub fn parse_class(tokens: Iter<Token>) -> Option<ClassDecl> {
+pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
+
+    loop {
+        if let Some(tok) = cursor.current_tok() {
+            let kind = tok.kind();
+
+            if kind == Eof {
+                break;
+            }
+
+            if kind == Class {
+                let mut fields: Vec<FieldDecl> = Vec::new();
+                let mut constructors: Vec<ConstructorDecl> = Vec::new();
+                let mut methods: Vec<MethodDecl> = Vec::new();
+                let mut generics: Vec<Generic> = Vec::new();
+
+                cursor.bump();
+
+                let mut current = cursor.next();
+                let mut current_kind = current.kind();
+
+                cursor.bump();
+
+                let class_name;
+
+                // Optional class name
+                if current_kind == Identifier {
+                    class_name = Some(current.content());
+                    cursor.bump();
+                    current = current_tok!(cursor);
+                    current_kind = current.kind();
+                }
+
+                // Optional Generics
+                if current_kind == Less {
+                    cursor.bump();
+                    loop {
+                        current = current_tok!(cursor);
+                        current_kind = current.kind();
+
+                        let next = cursor.next();
+                        let next_kind = next.kind();
+
+                        if current_kind == Greater {
+                            cursor.bump();
+                            current = current_tok!(cursor);
+                            current_kind = current.kind();
+                            break;
+                        }
+
+                        if current_kind == Identifier {
+                            generics.push(Generic::new(current.content().to_string()));
+
+                            if next_kind == Comma {
+                                cursor.bump();
+                            }
+
+                            cursor.bump();
+                            continue;
+                        }
+                        panic!("Invalid symbol in generics")
+                    }
+                }
+
+                if current_kind != OpenCurlyBrace {
+                    panic!("Invalid class syntax")
+                }
+
+                // Skip {
+                cursor.bump();
+                current = current_tok!(cursor);
+                current_kind = current.kind();
+
+
+
+            }
+        }
+        break;
+    }
 
     None
 }
