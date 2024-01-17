@@ -18,7 +18,7 @@
 use crate::decl::misc::ConstantDecl;
 use crate::parser::Cursor;
 
-pub fn parse_constants(cursor: &Cursor) -> Vec<ConstantDecl> {
+pub fn parse_constants(cursor: Cursor) -> Vec<ConstantDecl> {
     let constants = Vec::new();
 
 

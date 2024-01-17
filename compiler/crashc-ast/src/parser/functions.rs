@@ -18,7 +18,7 @@
 use crate::decl::module::FunctionDecl;
 use crate::parser::Cursor;
 
-pub fn parse_functions(cursor: &Cursor) -> Vec<FunctionDecl> {
+pub fn parse_functions(cursor: Cursor) -> Vec<FunctionDecl> {
     let functions = Vec::new();
 
     functions

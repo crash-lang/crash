@@ -18,7 +18,7 @@
 use crate::decl::enumeration::EnumDecl;
 use crate::parser::Cursor;
 
-pub fn parse_enum(cursor: &Cursor) -> Option<EnumDecl> {
+pub fn parse_enum(cursor: Cursor) -> Option<EnumDecl> {
 
     None
 }

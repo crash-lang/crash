@@ -16,7 +16,7 @@
  */
 
 use std::slice::Iter;
-use crashc_lexer::token::{Token, TokenKind};
+use crashc_lexer::token::Token;
 
 pub(crate) mod import;
 pub(crate) mod class;
@@ -25,21 +25,19 @@ pub(crate) mod constants;
 pub(crate) mod enumeration;
 mod macros;
 
+
+#[derive(Clone)]
 pub struct Cursor<'a> {
     len_remaining: usize,
-    tokens: Iter<'a, Token>,
-    prev: &'a Token
+    tokens: Iter<'a, Token>
 }
-
-const EOF_TOKEN: &Token = &Token::new(TokenKind::Eof, 0, "");
 
 impl<'a> Cursor<'a> {
 
-    pub(crate) fn new(tokens: Iter<Token>) -> Cursor<'a> {
+    pub(crate) fn new(tokens: Iter<'a, Token>) -> Cursor<'a> {
         Cursor {
             len_remaining: tokens.len(),
-            tokens: tokens,
-            prev: EOF_TOKEN
+            tokens
         }
     }
 
@@ -48,16 +46,15 @@ impl<'a> Cursor<'a> {
     }
 
     pub(crate) fn advance(&mut self) {
-        if let Some(tok) = self.tokens.next() {
-            self.prev = tok;
+        if let Some(_tok) = self.tokens.next() {
             self.len_remaining -= 1;
         }
     }
 
-    pub(crate) fn next(&self) -> &Token {
+    pub(crate) fn next(&self) -> Option<&Token> {
         let mut iterator = self.tokens.clone();
         iterator.next();
-        iterator.next().unwrap_or(EOF_TOKEN)
+        iterator.next()
     }
 
     pub(crate) fn is_eof(&self) -> bool {
@@ -70,15 +67,10 @@ impl<'a> Cursor<'a> {
 
     pub(crate) fn bump(&mut self) -> Option<&Token> {
         let tok = self.tokens.next()?;
-        self.prev = tok;
         Some(tok)
     }
 
     pub(crate) fn len_remaining(&self) -> usize {
         self.len_remaining
-    }
-
-    pub(crate) fn prev(&self) -> &'a Token {
-        self.prev
     }
 }

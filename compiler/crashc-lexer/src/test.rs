@@ -28,9 +28,9 @@ fn test_tokenize_string_some_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content;
-        let len = tok.len;
-        let kind = tok.kind;
+        let content = tok.content();
+        let len = tok.len();
+        let kind = tok.kind();
         match index {
             0 => {
                 assert_eq!(content, "Hello world");
@@ -64,9 +64,9 @@ fn test_tokenize_string_float_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content;
-        let len = tok.len;
-        let kind = tok.kind;
+        let content = tok.content();
+        let len = tok.len();
+        let kind = tok.kind();
         match index {
             0 => {
                 assert_eq!(content, "12.56");
@@ -97,9 +97,9 @@ fn test_tokenize_string_int_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content;
-        let len = tok.len;
-        let kind = tok.kind;
+        let content = tok.content();
+        let len = tok.len();
+        let kind = tok.kind();
         match index {
             0 => {
                 assert_eq!(content, "345656");
@@ -148,9 +148,9 @@ fn test_tokenize_operators() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content;
-        let len = tok.len;
-        let kind = tok.kind;
+        let content = tok.content();
+        let len = tok.len();
+        let kind = tok.kind();
         match index {
             0 => {
                 assert_eq!(content, "==");
@@ -228,9 +228,9 @@ fn test_tokenize_string_symbols() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content;
-        let len = tok.len;
-        let kind = tok.kind;
+        let content = tok.content();
+        let len = tok.len();
+        let kind = tok.kind();
         match index {
             0 => {
                 assert_eq!(content, ";");

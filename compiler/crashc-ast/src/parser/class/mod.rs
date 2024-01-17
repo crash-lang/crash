@@ -16,7 +16,7 @@
  */
 
 use crashc_lexer::token::TokenKind::*;
-use crate::current_tok;
+use crate::{current_tok, next_tok};
 use crate::decl::class::{ClassDecl, ConstructorDecl, FieldDecl, MethodDecl};
 use crate::decl::misc::Generic;
 use crate::parser::Cursor;
@@ -38,11 +38,10 @@ pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
                 let mut generics: Vec<Generic> = Vec::new();
 
                 cursor.bump();
-
-                let mut current = cursor.next();
-                let mut current_kind = current.kind();
-
                 cursor.bump();
+
+                let mut current = next_tok!(cursor);
+                let mut current_kind = current.kind();
 
                 let class_name;
 
@@ -61,7 +60,7 @@ pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
                         current = current_tok!(cursor);
                         current_kind = current.kind();
 
-                        let next = cursor.next();
+                        let next = next_tok!(cursor);
                         let next_kind = next.kind();
 
                         if current_kind == Greater {

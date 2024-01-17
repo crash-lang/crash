@@ -17,7 +17,7 @@
 
 use crate::parser::Cursor;
 
-pub fn parse_imports(cursor: &Cursor) -> Vec<String> {
+pub fn parse_imports(cursor: Cursor) -> Vec<String> {
     let imports = Vec::new();
 
 

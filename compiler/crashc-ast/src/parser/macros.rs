@@ -26,3 +26,15 @@ macro_rules! current_tok {
         }
     };
 }
+
+#[macro_export]
+macro_rules! next_tok {
+    ( $cursor:expr ) => {
+        match $cursor.next() {
+            None => {
+                return None;
+            }
+            Some(tok) => tok
+        }
+    };
+}
