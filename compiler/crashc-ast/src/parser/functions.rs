@@ -15,11 +15,10 @@
  *
  */
 
-use std::slice::Iter;
-use crashc_lexer::token::Token;
 use crate::decl::module::FunctionDecl;
+use crate::parser::Cursor;
 
-pub fn parse_functions(tokens: Iter<Token>) -> Vec<FunctionDecl> {
+pub fn parse_functions(cursor: &Cursor) -> Vec<FunctionDecl> {
     let functions = Vec::new();
 
     functions

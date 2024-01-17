@@ -15,10 +15,9 @@
  *
  */
 
-use std::slice::Iter;
-use crashc_lexer::token::Token;
+use crate::parser::Cursor;
 
-pub fn parse_imports(tokens: Iter<Token>) -> Vec<String> {
+pub fn parse_imports(cursor: &Cursor) -> Vec<String> {
     let imports = Vec::new();
 
 

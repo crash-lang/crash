@@ -15,11 +15,10 @@
  *
  */
 
-use std::slice::Iter;
-use crashc_lexer::token::Token;
 use crate::decl::misc::ConstantDecl;
+use crate::parser::Cursor;
 
-pub fn parse_constants(tokens: Iter<Token>) -> Vec<ConstantDecl> {
+pub fn parse_constants(cursor: &Cursor) -> Vec<ConstantDecl> {
     let constants = Vec::new();
 
 

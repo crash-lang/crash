@@ -15,11 +15,10 @@
  *
  */
 
-use std::slice::Iter;
-use crashc_lexer::token::Token;
 use crate::decl::enumeration::EnumDecl;
+use crate::parser::Cursor;
 
-pub fn parse_enum(tokens: Iter<Token>) -> Option<EnumDecl> {
+pub fn parse_enum(cursor: &Cursor) -> Option<EnumDecl> {
 
     None
 }
