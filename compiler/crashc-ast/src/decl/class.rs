@@ -22,6 +22,7 @@ use crate::decl::statement::StatementDecl;
 use crate::decl::types::Type;
 
 pub struct ClassDecl {
+    name: Option<String>,
     fields: Vec<FieldDecl>,
     constructors: Vec<ConstructorDecl>,
     methods: Vec<MethodDecl>,
@@ -62,8 +63,8 @@ impl MethodDecl {
 }
 
 impl ClassDecl {
-    pub fn new(fields: Vec<FieldDecl>, constructors: Vec<ConstructorDecl>, methods: Vec<MethodDecl>, generics: Vec<Generic>) -> Self {
-        Self { fields, constructors, methods, generics }
+    pub fn new(name: Option<String>, fields: Vec<FieldDecl>, constructors: Vec<ConstructorDecl>, methods: Vec<MethodDecl>, generics: Vec<Generic>) -> Self {
+        Self { name, fields, constructors, methods, generics }
     }
 }
 

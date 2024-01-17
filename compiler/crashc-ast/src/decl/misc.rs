@@ -31,8 +31,15 @@ pub struct FuncParameter {
 }
 
 pub struct Generic {
-
+    name: String
 }
+
+impl Generic {
+    pub fn new(name: String) -> Self {
+        Self { name }
+    }
+}
+
 
 impl ConstantDecl {
     pub fn new(name: String, typ: Type, expr: ExpressionDecl) -> Self {
