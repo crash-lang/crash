@@ -34,7 +34,7 @@ pub fn build_module_decl(tokens: Vec<Token>, module_name: String) -> ModuleDecl 
     // Maybe make it async later, shouldn't be that hard.
     ModuleDecl::new(
         module_name,
-        parse_imports(cursor.clone()),
+        parse_imports(cursor.clone()).unwrap_or(Vec::new()),
         parse_constants(cursor.clone()),
         parse_functions(cursor.clone()),
         parse_class(cursor.clone()),
