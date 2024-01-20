@@ -40,7 +40,6 @@ impl Generic {
     }
 }
 
-
 impl ConstantDecl {
     pub fn new(name: String, typ: Type, expr: ExpressionDecl) -> Self {
         Self { name, typ, expr }

@@ -15,12 +15,81 @@
  *
  */
 
+use crashc_lexer::token::TokenKind::*;
+use crate::{current_tok, next_tok};
 use crate::parser::Cursor;
 
-pub fn parse_imports(cursor: Cursor) -> Vec<String> {
-    let imports = Vec::new();
+// Returns option, because we want to use macros
+pub fn parse_imports(mut cursor: Cursor) -> Option<Vec<String>> {
+    let mut imports = Vec::new();
 
+    loop {
+        if let Some(tok) = cursor.current_tok() {
+            let kind = tok.kind();
 
+            if kind == Eof {
+                break;
+            }
 
-    imports
+            if kind == Import {
+                cursor.bump();
+
+                let mut current = current_tok!(cursor);
+                let mut current_kind = current.kind();
+
+                // We have a multi-import
+                if current_kind == OpenCurlyBrace {
+                    // skip {
+                    cursor.bump();
+
+                    loop {
+                        current = current_tok!(cursor);
+                        current_kind = current.kind();
+
+                        if current_kind == CloseCurlyBrace {
+                            // Skip }
+                            cursor.bump();
+                            break
+                        }
+
+                        if current_kind != Identifier {
+                            panic!("Not identifier with comma")
+                        }
+
+                        imports.push(current.content().to_string());
+
+                        let next_kind = next_tok!(cursor).kind();
+
+                        if next_kind != Comma || next_kind != CloseCurlyBrace {
+                            panic!("Invalid multi-import syntax")
+                        }
+
+                        // Skip identifier and ,
+                        cursor.bump();
+                        cursor.bump();
+                    }
+
+                    continue
+                }
+
+                // We have a single import
+                if current_kind == Identifier {
+                    if next_tok!(cursor).kind() != Semicolon {
+                        panic!("Single import not closed with Semicolon")
+                    }
+
+                    imports.push(current.content().to_string());
+
+                    // Skip identifier and ;
+                    cursor.bump();
+                    cursor.bump();
+                    continue
+                }
+
+                panic!("Something's weird in imports")
+            }
+        }
+    }
+
+    Some(imports)
 }

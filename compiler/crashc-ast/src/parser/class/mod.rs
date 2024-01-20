@@ -16,13 +16,13 @@
  */
 
 use crashc_lexer::token::TokenKind::*;
+
 use crate::{current_tok, next_tok};
 use crate::decl::class::{ClassDecl, ConstructorDecl, FieldDecl, MethodDecl};
 use crate::decl::misc::Generic;
 use crate::parser::Cursor;
 
 pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
-
     loop {
         if let Some(tok) = cursor.current_tok() {
             let kind = tok.kind();
@@ -38,7 +38,6 @@ pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
                 let mut generics: Vec<Generic> = Vec::new();
 
                 cursor.bump();
-                cursor.bump();
 
                 let mut current = next_tok!(cursor);
                 let mut current_kind = current.kind();
@@ -47,10 +46,12 @@ pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
 
                 // Optional class name
                 if current_kind == Identifier {
-                    class_name = Some(current.content());
+                    class_name = Some(current.content().to_string());
                     cursor.bump();
                     current = current_tok!(cursor);
                     current_kind = current.kind();
+                } else {
+                    class_name = None;
                 }
 
                 // Optional Generics
@@ -93,8 +94,20 @@ pub fn parse_class(mut cursor: Cursor) -> Option<ClassDecl> {
                 current = current_tok!(cursor);
                 current_kind = current.kind();
 
+                // TODO Implement parsing of methods, fields and constructors
 
+                // Skip }
+                if current_kind != CloseCurlyBrace {
+                    panic!("Invalid class syntax")
+                }
 
+                return Some(ClassDecl::new(
+                    class_name,
+                    fields,
+                    constructors,
+                    methods,
+                    generics,
+                ));
             }
         }
         break;
