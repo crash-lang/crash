@@ -17,9 +17,15 @@
 
 use crate::token::Base::*;
 use crate::token::TokenKind::*;
-use crate::token::LiteralKind;
+use crate::token::*;
 use crate::token::LiteralKind::*;
 use crate::tokenizer::Tokenizer;
+
+fn assert_tok(tok: Token, expected_string: &str, expected_len: u32, expected_kind: TokenKind) {
+    assert_eq!(tok.content(), expected_string);
+    assert_eq!(tok.len(), expected_len);
+    assert_eq!(tok.kind(), expected_kind);
+}
 
 #[test]
 fn test_tokenize_string_some_literals() {
@@ -28,28 +34,11 @@ fn test_tokenize_string_some_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content();
-        let len = tok.len();
-        let kind = tok.kind();
         match index {
-            0 => {
-                assert_eq!(content, "Hello world");
-                assert_eq!(len, 13);
-                assert_eq!(kind, Literal { kind: String });
-            }
-            1 => {
-                assert_eq!(content, "Hey you");
-                assert_eq!(len, 9);
-                assert_eq!(kind, Literal { kind: String });
-            }
-            2 => {
-                assert_eq!(content, "a");
-                assert_eq!(len, 3);
-                assert_eq!(kind, Literal { kind: Character })
-            }
-            _ => {
-                panic!("We don't have enough strings tokenized");
-            }
+            0 => assert_tok(tok, "Hello world", 13, Literal { kind: String }),
+            1 => assert_tok(tok, "Hey you", 9, Literal { kind: String }),
+            2 => assert_tok(tok, "a", 3, Literal { kind: Character }),
+            _ => panic!("We don't have enough strings tokenized")
         }
         index+=1;
     }
@@ -64,23 +53,10 @@ fn test_tokenize_string_float_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content();
-        let len = tok.len();
-        let kind = tok.kind();
         match index {
-            0 => {
-                assert_eq!(content, "12.56");
-                assert_eq!(len, 6);
-                assert_eq!(kind, Literal { kind: Float });
-            }
-            1 => {
-                assert_eq!(content, "34.635656");
-                assert_eq!(len, 11);
-                assert_eq!(kind, Literal { kind: Float });
-            }
-            _ => {
-                panic!("We don't have enough floats tokenized");
-            }
+            0 => assert_tok(tok, "12.56", 6, Literal { kind: Float }),
+            1 => assert_tok(tok, "34.635656", 11, Literal { kind: Float }),
+            _ => panic!("We don't have enough floats tokenized")
         }
         index+=1;
     }
@@ -97,33 +73,12 @@ fn test_tokenize_string_int_literals() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content();
-        let len = tok.len();
-        let kind = tok.kind();
         match index {
-            0 => {
-                assert_eq!(content, "345656");
-                assert_eq!(len, 8);
-                assert_eq!(kind, Literal { kind: Integer { base: Decimal } });
-            }
-            1 => {
-                assert_eq!(content, "34546f");
-                assert_eq!(len, 8);
-                assert_eq!(kind, Literal { kind: Integer { base: Hexadecimal } });
-            }
-            2 => {
-                assert_eq!(content, "456");
-                assert_eq!(len, 4);
-                assert_eq!(kind, Literal { kind: Integer { base: Octal } });
-            }
-            3 => {
-                assert_eq!(content, "00010000");
-                assert_eq!(len, 10);
-                assert_eq!(kind, Literal { kind: Integer { base: Binary } });
-            }
-            _ => {
-                panic!("We don't have enough integers tokenized");
-            }
+            0 => assert_tok(tok, "345656", 8, Literal { kind: Integer { base: Decimal }}),
+            1 => assert_tok(tok, "34546f", 8, Literal { kind: Integer { base: Hexadecimal } }),
+            2 => assert_tok(tok, "456", 4, Literal { kind: Integer { base: Octal } }),
+            3 => assert_tok(tok, "00010000", 10, Literal { kind: Integer { base: Binary } }),
+            _ => panic!("We don't have enough integers tokenized")
         }
         index+=1;
     }
@@ -148,73 +103,20 @@ fn test_tokenize_operators() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content();
-        let len = tok.len();
-        let kind = tok.kind();
         match index {
-            0 => {
-                assert_eq!(content, "==");
-                assert_eq!(len, 2);
-                assert_eq!(kind, Equals);
-            }
-            1 => {
-                assert_eq!(content, "!=");
-                assert_eq!(len, 2);
-                assert_eq!(kind, NotEquals);
-            }
-            2 => {
-                assert_eq!(content, "||");
-                assert_eq!(len, 2);
-                assert_eq!(kind, Or);
-            }
-            3 => {
-                assert_eq!(content, "&&");
-                assert_eq!(len, 2);
-                assert_eq!(kind, And);
-            }
-            4 => {
-                assert_eq!(content, "|");
-                assert_eq!(len, 1);
-                assert_eq!(kind, BitwiseOr);
-            }
-            5 => {
-                assert_eq!(content, "&");
-                assert_eq!(len, 1);
-                assert_eq!(kind, BitwiseAnd);
-            }
-            6 => {
-                assert_eq!(content, "<<");
-                assert_eq!(len, 2);
-                assert_eq!(kind, LeftShift);
-            }
-            7 => {
-                assert_eq!(content, ">>");
-                assert_eq!(len, 2);
-                assert_eq!(kind, RightShift);
-            }
-            8 => {
-                assert_eq!(content, "<");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Less);
-            }
-            9 => {
-                assert_eq!(content, ">");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Greater);
-            }
-            10 => {
-                assert_eq!(content, "|");
-                assert_eq!(len, 1);
-                assert_eq!(kind, BitwiseOr);
-            }
-            11 => {
-                assert_eq!(content, ">>>");
-                assert_eq!(len, 3);
-                assert_eq!(kind, UnsignedRightShift);
-            }
-            _ => {
-                panic!("We don't have enough things tokenized");
-            }
+            0 => assert_tok(tok, "==", 2, Equals),
+            1 => assert_tok(tok, "!=", 2, NotEquals),
+            2 => assert_tok(tok, "||", 2, Or),
+            3 => assert_tok(tok, "&&", 2, And),
+            4 => assert_tok(tok, "|", 1, BitwiseOr),
+            5 => assert_tok(tok, "&", 1, BitwiseAnd),
+            6 => assert_tok(tok, "<<", 2, LeftShift),
+            7 => assert_tok(tok, ">>", 2, RightShift),
+            8 => assert_tok(tok, "<", 1, Less),
+            9 => assert_tok(tok, ">", 1, Greater),
+            10 => assert_tok(tok, "|", 1, BitwiseOr),
+            11 => assert_tok(tok, ">>>", 3, UnsignedRightShift),
+            _ => panic!("We don't have enough things tokenized")
         }
         index+=1;
     }
@@ -228,63 +130,18 @@ fn test_tokenize_string_symbols() {
 
     let mut index = 0;
     for tok in tokens {
-        let content = tok.content();
-        let len = tok.len();
-        let kind = tok.kind();
         match index {
-            0 => {
-                assert_eq!(content, ";");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Semicolon);
-            }
-            1 => {
-                assert_eq!(content, "{");
-                assert_eq!(len, 1);
-                assert_eq!(kind, OpenCurlyBrace);
-            }
-            2 => {
-                assert_eq!(content, "(");
-                assert_eq!(len, 1);
-                assert_eq!(kind, OpenBrace);
-            }
-            3 => {
-                assert_eq!(content, "[");
-                assert_eq!(len, 1);
-                assert_eq!(kind, OpenSquareBrace);
-            }
-            4 => {
-                assert_eq!(content, ")");
-                assert_eq!(len, 1);
-                assert_eq!(kind, CloseBrace);
-            }
-            5 => {
-                assert_eq!(content, "]");
-                assert_eq!(len, 1);
-                assert_eq!(kind, CloseSquareBrace);
-            }
-            6 => {
-                assert_eq!(content, "}");
-                assert_eq!(len, 1);
-                assert_eq!(kind, CloseCurlyBrace);
-            }
-            7 => {
-                assert_eq!(content, ",");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Comma);
-            }
-            8 => {
-                assert_eq!(content, ":");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Colon);
-            }
-            9 => {
-                assert_eq!(content, "?");
-                assert_eq!(len, 1);
-                assert_eq!(kind, Question);
-            }
-            _ => {
-                panic!("We don't have enough symbols tokenized");
-            }
+            0 => assert_tok(tok, ";", 1, Semicolon),
+            1 => assert_tok(tok, "{", 1, OpenCurlyBrace),
+            2 => assert_tok(tok, "(", 1, OpenBrace),
+            3 => assert_tok(tok, "[", 1, OpenSquareBrace),
+            4 => assert_tok(tok, ")", 1, CloseBrace),
+            5 => assert_tok(tok, "]", 1, CloseSquareBrace),
+            6 => assert_tok(tok, "}", 1, CloseCurlyBrace),
+            7 => assert_tok(tok, ",", 1, Comma),
+            8 => assert_tok(tok, ":", 1, Colon),
+            9 => assert_tok(tok, "?", 1, Question),
+            _ => panic!("We don't have enough symbols tokenized")
         }
         index+=1;
     }
