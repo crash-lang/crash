@@ -12,13 +12,177 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-pub mod tokenizer;
-pub mod token;
+use crate::lexer::Lexer;
+use crate::rule::LexingRule;
+use crate::token::Token;
+use crate::token::TokenType::*;
 
-mod cursor;
-#[cfg(test)]
-mod test;
-mod macros;
-mod utils;
+pub mod token;
+pub mod position;
+
+mod rule;
+mod lexer;
+
+pub fn tokenize(content: &str) -> Vec<Token> {
+    Lexer::new(build_rules()).tokenize(content, true)
+}
+
+#[macro_export]
+macro_rules! find_rule {
+    ( $rules:expr, $typ:expr ) => {{
+        let typ_reference = &$typ;
+        let mut the_rule = LexingRule::new(Vec::new(), typ_reference);
+
+        for rule in $rules.clone() {
+            if rule.typ() == typ_reference {
+                the_rule = rule;
+            }
+        }
+
+        the_rule
+    }};
+}
+
+#[macro_export]
+macro_rules! add_rule {
+    ( $rules:expr, $typ:expr , $content:expr) => {
+        {
+            let mut rule = find_rule!($rules, $typ);
+            rule.add($content.to_string());
+            $rules.push(rule);
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! add_regex_rule {
+    ( $rules:expr, $typ:expr , $content:expr) => {
+        {
+            let mut rule = find_rule!($rules, $typ);
+            rule.add_regex($content.to_string());
+            $rules.push(rule);
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! add_multi_line_rule {
+    ( $rules:expr, $typ:expr , $open:expr, $close:expr) => {
+        {
+            let mut rule = find_rule!($rules, $typ);
+            rule.add_multi_line($open.to_string(), $close.to_string());
+            $rules.push(rule);
+        }
+    };
+}
+
+fn build_rules() -> Vec<LexingRule<'static>> {
+    let mut rules: Vec<LexingRule> = Vec::new();
+
+    // General whitespace
+    add_regex_rule!(rules, Whitespace, "[ \t\r\n]+");
+
+    // Comments
+    add_regex_rule!(rules, Whitespace, "//[^\\r\\n]*");
+    add_multi_line_rule!(rules, Whitespace, "/*", "*/");
+
+    add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:]*");
+    add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
+    add_regex_rule!(rules, BinaryLiteral, "b[01_]*");
+    add_regex_rule!(rules, OctalLiteral, "o[0-7_]*");
+    add_regex_rule!(rules, DecimalLiteral, "[0-9_]*");
+    add_regex_rule!(rules, HexadecimalLiteral, "#[0-9a-fA-F_]*");
+
+    add_rule!(rules, BooleanLiteral, "true");
+    add_rule!(rules, BooleanLiteral, "false");
+
+    add_multi_line_rule!(rules, StringLiteral, "\"", "\"");
+    add_multi_line_rule!(rules, CharLiteral, "'", "'");
+
+    add_rule!(rules, Semicolon, ";");
+    add_rule!(rules, Comma, ",");
+    add_rule!(rules, OpenBrace, "(");
+    add_rule!(rules, CloseBrace, ")");
+    add_rule!(rules, OpenCurlyBrace, "{");
+    add_rule!(rules, CloseCurlyBrace, "}");
+    add_rule!(rules, OpenSquareBrace, "[");
+    add_rule!(rules, CloseSquareBrace, "]");
+    add_rule!(rules, Question, "?");
+    add_rule!(rules, Colon, ":");
+    add_rule!(rules, At, "@");
+
+    add_rule!(rules, Add, "+");
+    add_rule!(rules, Subtract, "-");
+    add_rule!(rules, Multiply, "*");
+    add_rule!(rules, Divide, "/");
+    add_rule!(rules, Modulus, "%");
+
+    add_rule!(rules, Equals, "==");
+    add_rule!(rules, NotEquals, "!=");
+    add_rule!(rules, Greater, ">");
+    add_rule!(rules, GreaterOrEqual, ">=");
+    add_rule!(rules, Less, "<");
+    add_rule!(rules, LessOrEqual, "<=");
+    add_rule!(rules, Exclamation, "!");
+    add_rule!(rules, And, "&&");
+    add_rule!(rules, Or, "||");
+
+    add_rule!(rules, BitwiseOr, "|");
+    add_rule!(rules, BitwiseAnd, "&");
+    add_rule!(rules, BitwiseXor, "^");
+    add_rule!(rules, BitwiseComplement, "~");
+    add_rule!(rules, LeftShift, "<<");
+    add_rule!(rules, RightShift, ">>");
+    add_rule!(rules, UnsignedRightShift, ">>>");
+
+    add_rule!(rules, Assign, "=");
+    add_rule!(rules, Mutable, "mut");
+
+    add_rule!(rules, I8, "i8");
+    add_rule!(rules, I8, "byte");
+    add_rule!(rules, U8, "u8");
+    add_rule!(rules, I16, "i16");
+    add_rule!(rules, I16, "short");
+    add_rule!(rules, U16, "u16");
+    add_rule!(rules, I32, "i32");
+    add_rule!(rules, I32, "int");
+    add_rule!(rules, U32, "u32");
+    add_rule!(rules, I64, "i64");
+    add_rule!(rules, I64, "long");
+    add_rule!(rules, U64, "u64");
+    add_rule!(rules, I128, "i128");
+    add_rule!(rules, U128, "u128");
+    add_rule!(rules, F32, "f32");
+    add_rule!(rules, F32, "float");
+    add_rule!(rules, F64, "f64");
+    add_rule!(rules, F64, "double");
+    add_rule!(rules, Boolean, "boolean");
+    add_rule!(rules, Boolean, "bool");
+    add_rule!(rules, Char, "char");
+
+
+    add_rule!(rules, If, "if");
+    add_rule!(rules, Switch, "switch");
+    add_rule!(rules, Match, "match");
+    add_rule!(rules, Loop, "loop");
+    add_rule!(rules, For, "for");
+    add_rule!(rules, Return, "return");
+    add_rule!(rules, Break, "break");
+    add_rule!(rules, Continue, "continue");
+
+    add_rule!(rules, Class, "class");
+    add_rule!(rules, Interface, "interface");
+    add_rule!(rules, Enum, "enum");
+    add_rule!(rules, Annotation, "annotation");
+    add_rule!(rules, Import, "import");
+    add_rule!(rules, Implements, "implements");
+    add_rule!(rules, Public, "public");
+    add_rule!(rules, Public, "pub");
+    add_rule!(rules, Protected, "protected");
+    add_rule!(rules, Protected, "prot");
+
+    rules
+}

@@ -12,305 +12,126 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-#[derive(Debug)]
-pub struct Token {
-    kind: TokenKind,
-    len: u32,
-    content: String
+use crate::position::{Position, TokenPosition};
+
+pub struct Token<'a> {
+    typ: &'a TokenType,
+    value: String,
+    position: TokenPosition,
 }
 
-impl Token {
-
-    pub fn new (kind: TokenKind, len: u32, content: &str) -> Self {
-        Token { kind, len, content: content.to_string() }
-    }
-
-    pub fn kind(&self) -> TokenKind {
-        self.kind
-    }
-    
-    pub fn len(&self) -> u32 {
-        self.len
-    }
-    
-    pub fn content(&self) -> &str {
-        &self.content
-    }
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum TokenKind {
-
+#[derive(Debug, PartialEq, Eq)]
+pub enum TokenType {
+    Eof,
     Whitespace,
 
-    Literal { kind: LiteralKind },
+    IdentifierLiteral,
+    BinaryLiteral,
+    OctalLiteral,
+    DecimalLiteral,
+    HexadecimalLiteral,
+    FloatLiteral,
+    CharLiteral,
+    StringLiteral,
+    BooleanLiteral,
 
+    I8,
+    U8,
+    I16,
+    U16,
+    I32,
+    U32,
+    I64,
+    U64,
+    I128,
+    U128,
+    F32,
+    F64,
+    Boolean,
+    Char,
 
-    // General tokens
-
-    /// ";"
     Semicolon,
-
-    /// ","
     Comma,
-
-    /// "("
     OpenBrace,
-
-    /// ")"
     CloseBrace,
-
-    /// "{"
     OpenCurlyBrace,
-
-    /// "}"
     CloseCurlyBrace,
-
-    /// "["
     OpenSquareBrace,
-
-    /// "]"
     CloseSquareBrace,
-
-    /// "?"
     Question,
-
-    /// ":"
     Colon,
+    At,
 
-
-    // Math tokens
-
-    /// "+"
     Add,
-
-    /// "-"
     Subtract,
-
-    /// "*"
     Multiply,
-
-    /// "/"
     Divide,
-
-    /// "%"
     Modulus,
 
-
-    // Logic
-
-    /// "=="
     Equals,
-
-    /// "!="
     NotEquals,
-
-    /// ">="
-    GreaterOrEqual,
-
-    /// "<="
-    LessOrEqual,
-
-    /// "!"
-    Exclamation,
-
-    /// ">"
     Greater,
-
-    /// "<"
+    GreaterOrEqual,
     Less,
-
-    /// "&&"
+    LessOrEqual,
+    Exclamation,
     And,
-
-    /// "||"
     Or,
-    
-    
-    // Bitwise and Shift operators
-    
-    /// "|"
-    BitwiseOr,
-    
-    /// "&"
-    BitwiseAnd,
-    
-    /// "^"
-    BitwiseXor,
-    
-    /// "~"
-    BitwiseComplement,
-    
-    /// "<<"
-    LeftShift,
-    
-    /// Signed ">>"
-    RightShift,
 
-    /// ">>>"
+    BitwiseOr,
+    BitwiseAnd,
+    BitwiseXor,
+    BitwiseComplement,
+    LeftShift,
+    RightShift,
     UnsignedRightShift,
 
-
-    // Variable
-
-    /// "="
     Assign,
-
-    /// "mut"
     Mutable,
 
-    Primitive { kind: PrimitiveKind },
-
-
-    // Statements
-
-    /// "if"
     If,
-
-    /// "switch"
     Switch,
-
-    /// "match"
     Match,
-
-    /// "loop"
     Loop,
-
-    /// "for"
     For,
-
-    /// "return" or "ret"
     Return,
-
-    /// "break"
     Break,
-
-    /// "continue"
     Continue,
 
-
-    // File
-
-    /// "class"
     Class,
-
-    /// "interface"
     Interface,
-
-    /// "enum"
     Enum,
-
-    /// "import"
+    Annotation,
     Import,
-
-    /// "implements"
     Implements,
 
-    AccessModifier { kind: ModifierKind },
-
-    Identifier,
-
-    /// End of input
-    Eof
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum ModifierKind {
-    /// "public" or "pub"
     Public,
-
-    /// "protected" or "prot"
-    Protected,
-
-    /// "intern"
-    Internal
+    Protected
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum PrimitiveKind {
-    /// "i8"
-    I8,
-
-    /// "u8"
-    U8,
-
-    /// "i16"
-    I16,
-
-    /// "u16"
-    U16,
-
-    /// "i32"
-    I32,
-
-    /// "u32
-    U32,
-
-    /// "i64"
-    I64,
-
-    /// "u64"
-    U64,
-
-    /// "f32"
-    F32,
-
-    /// "f64"
-    F64,
-
-    /// "boolean" or "bool"
-    Bool,
-
-    /// "char"
-    Char
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum LiteralKind {
-    /**
-    Any _ gets ignored and is just a visual splitter
-
-    Binary: b0000_1011
-    Octal: o124_5
-    Decimal: 345_7324
-    Hexadecimal: #fff345
-     */
-    Integer {
-        base: Base
-    },
-
-    /**
-    Any _ gets ignored and is just a visual splitter
-
-    Float literals shouldn't have a base,
-    because it would be to complicated anyway.
-     */
-    Float,
-
-    /// "'a'" | "'b'"
-    Character,
-
-    /// ""Hello world""
-    String,
-
-    /// "true" or "false"
-    Boolean {
-        val: bool
+impl<'a> Token<'a> {
+    pub(crate) fn new(typ: &'a TokenType, value: String, position: Position) -> Token<'a> {
+        let length = value.len();
+        Token {
+            typ,
+            value,
+            position: TokenPosition::new(position,
+                                         Position::new(
+                                             position.line(),
+                                             position.column() + (length as u32))),
+        }
     }
-}
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Base {
-    /// Suffix: b#
-    Binary = 2,
-
-    /// Suffix: o#
-    Octal = 8,
-
-    Decimal = 10,
-
-    /// Suffix: #
-    Hexadecimal = 16
+    pub fn typ(&self) -> &TokenType {
+        &self.typ
+    }
+    pub fn value(&self) -> &str {
+        &self.value
+    }
+    pub fn position(&self) -> &TokenPosition {
+        &self.position
+    }
 }

@@ -15,12 +15,17 @@
  */
 
 use clap::Parser;
+use crashc_lexer::tokenize;
 
 fn main() {
     //let args = Args::parse();
 
 
-    
+    let vec = tokenize("");
+
+    for token in vec {
+        println!("{:?} {:?} {:?}", token.typ(), token.value(), token.position());
+    }
 }
 
 #[derive(Parser, Debug)]

@@ -15,40 +15,41 @@
  *
  */
 
-use crate::decl::expression::ExpressionDecl;
-use crate::decl::types::Type;
 
-pub struct ConstantDecl {
-    name: String,
-    typ: Type,
-    expr: ExpressionDecl,
+#[derive(Copy, Clone)]
+pub struct Position {
+    line: u32,
+    column: u32
 }
 
-pub struct FuncParameter {
-    typ: Type,
-    name: String,
-    mutable: bool,
+#[derive(Copy, Clone)]
+pub struct TokenPosition {
+    start: Position,
+    end: Position
 }
 
-pub struct Generic {
-    name: String
-}
+impl Position {
+    pub fn new(line: u32, column: u32) -> Self {
+        Self { line, column }
+    }
 
-impl Generic {
-    pub fn new(name: String) -> Self {
-        Self { name }
+    pub fn line(&self) -> u32 {
+        self.line
+    }
+    pub fn column(&self) -> u32 {
+        self.column
     }
 }
 
-impl ConstantDecl {
-    pub fn new(name: String, typ: Type, expr: ExpressionDecl) -> Self {
-        Self { name, typ, expr }
+impl TokenPosition {
+    pub fn new(start: Position, end: Position) -> Self {
+        Self { start, end }
+    }
+
+    pub fn start(&self) -> &Position {
+        &self.start
+    }
+    pub fn end(&self) -> &Position {
+        &self.end
     }
 }
-
-impl FuncParameter {
-    pub fn new(typ: Type, name: String, mutable: bool) -> Self {
-        Self { typ, name, mutable }
-    }
-}
-

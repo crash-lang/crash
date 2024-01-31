@@ -16,29 +16,17 @@
  */
 
 use crashc_lexer::token::Token;
-use crate::decl::module::ModuleDecl;
-use crate::parser::class::parse_class;
-use crate::parser::constants::parse_constants;
-use crate::parser::Cursor;
-use crate::parser::enumeration::parse_enum;
-use crate::parser::functions::parse_functions;
-use crate::parser::import::parse_imports;
+use crate::components::CrashModule;
+use crate::parser::Parser;
 
-mod decl;
+pub mod components;
+
+mod misc;
 mod parser;
+mod cursor;
 
-pub fn build_module_decl(tokens: Vec<Token>, module_name: String) -> ModuleDecl {
-    // No need for making it mutable, because each part gets parsed separately anyway.
-    let cursor = Cursor::new(tokens.iter());
+pub fn build_module_decl <'a> (tokens: Vec<Token>, module_name: String) -> CrashModule<'a> {
+    let mut parser = Parser::new(tokens);
 
-    // Maybe make it async later, shouldn't be that hard.
-    ModuleDecl::new(
-        module_name,
-        parse_imports(cursor.clone()).unwrap_or(Vec::new()),
-        parse_constants(cursor.clone()),
-        parse_functions(cursor.clone()),
-        parse_class(cursor.clone()),
-        parse_enum(cursor.clone()),
-        None
-    )
+    parser.parse_module(module_name)
 }

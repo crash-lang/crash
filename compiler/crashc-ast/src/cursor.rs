@@ -18,14 +18,6 @@
 use std::slice::Iter;
 use crashc_lexer::token::Token;
 
-pub(crate) mod import;
-pub(crate) mod class;
-pub(crate) mod functions;
-pub(crate) mod constants;
-pub(crate) mod enumeration;
-mod macros;
-
-
 #[derive(Clone)]
 pub struct Cursor<'a> {
     len_remaining: usize,
