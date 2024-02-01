@@ -84,11 +84,12 @@ fn build_rules() -> Vec<LexingRule> {
 
 
     add_rule!(rules, Assign, "=");
-    add_rule!(rules, Mutable, "mut");
+    add_rule!(rules, InstanceOf, "instanceof");
 
 
     add_rule!(rules, I8, "i8");
     add_rule!(rules, I8, "byte");
+
     add_rule!(rules, U8, "u8");
 
     add_rule!(rules, I16, "i16");
@@ -122,6 +123,9 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Char, "char");
 
 
+    add_rule!(rules, Function, "function");
+
+
     add_rule!(rules, If, "if");
     add_rule!(rules, Switch, "switch");
     add_rule!(rules, Match, "match");
@@ -138,10 +142,14 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Annotation, "annotation");
     add_rule!(rules, Import, "import");
     add_rule!(rules, Implements, "implements");
+    add_rule!(rules, Extends, "extends");
+
     add_rule!(rules, Public, "public");
     add_rule!(rules, Public, "pub");
     add_rule!(rules, Protected, "protected");
     add_rule!(rules, Protected, "prot");
+    add_rule!(rules, Override, "override");
+    add_rule!(rules, Mutable, "mut");
 
     /*
         Literals must start here.
@@ -149,12 +157,12 @@ fn build_rules() -> Vec<LexingRule> {
         so we check for identifier literals at last
      */
 
-    add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:]*");
     add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
     add_regex_rule!(rules, BinaryLiteral, "b[01_]*");
     add_regex_rule!(rules, OctalLiteral, "o[0-7_]*");
     add_regex_rule!(rules, DecimalLiteral, "[0-9_]*");
     add_regex_rule!(rules, HexadecimalLiteral, "#[0-9a-fA-F_]*");
+    add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:][a-zA-Z.:0-9]*");
 
     add_rule!(rules, BooleanLiteral, "true");
     add_rule!(rules, BooleanLiteral, "false");

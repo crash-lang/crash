@@ -1,0 +1,67 @@
+/*
+    Crash makes use of annotation.
+    But they are always used at runtime.
+    You can apply them on everything, including themselves.
+*/
+annotation EntityInfo {
+    String tag;
+
+    pub (String tag) {
+        this.tag = tag;
+    }
+
+    pub String tag() this.tag;
+}
+
+public String getTag(Entity entity) {
+    /*
+        With the @ we go into annotation mode,
+        on everything that has a type directly.
+    */
+    EntityInfo info = entity@EntityInfo;
+
+    return info.tag();
+}
+
+/*
+    In Crash we don't have polymorphism.
+    We have to use the power of abstraction.
+
+    Everything inside an interface, is abstract and overridable.
+    But we can implement default behavior directly inside here,
+    by adding a body to any function.
+
+    Any class that implements this interface,
+    has to override every function.
+
+    We can even add abstract annotations, that have to be implemented
+    by the class implementing this interface.
+*/
+@EntityInfo
+interface {
+
+    /*
+        We could add an abstract constructor.
+        But we don't, because it wouldn't make sense here.
+    */
+
+    /*
+        This function is special.
+        It's mutable and abstract.
+        What's the difference?
+        Mutable functions can be overridden at runtime
+        and even for each instance in classes.
+        See functions below for more.
+    */
+    pub mut String displayName();
+}
+
+// If no return type provided, default is void
+pub overrideDisplayNameMethod(Entity entity, function() String overrideFunction) {
+    /*
+        We enter reflection-mode with #.
+        The lambda function from the function parameters must have the same signature
+        and return type as the function we want to override.
+    */
+    entity#displayName() = overrideFunction;
+}

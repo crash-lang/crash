@@ -56,6 +56,8 @@ pub enum TokenType {
     Boolean,
     Char,
 
+    Function,
+
     // Symbols
     Semicolon,
     Comma,
@@ -98,7 +100,7 @@ pub enum TokenType {
     UnsignedRightShift,
 
     Assign,
-    Mutable,
+    InstanceOf,
 
     // Statements
     If,
@@ -117,10 +119,13 @@ pub enum TokenType {
     Annotation,
     Import,
     Implements,
+    Extends,
 
     // Modifiers
     Public,
-    Protected
+    Protected,
+    Override,
+    Mutable
 }
 
 impl Token {

@@ -1,0 +1,9 @@
+[project]
+name = "crash-concepts"
+version = "0.0.0"
+
+[compiler]
+version = 2023.1
+
+[manifest]
+main = "org.crashlang.concepts.Main"
