@@ -25,61 +25,13 @@ pub mod position;
 
 mod rule;
 mod lexer;
+mod macros;
 
 pub fn tokenize(content: &str) -> Vec<Token> {
     Lexer::new(build_rules()).tokenize(content, true)
 }
 
-#[macro_export]
-macro_rules! find_rule {
-    ( $rules:expr, $typ:expr ) => {{
-        let typ_reference = &$typ;
-        let mut the_rule = LexingRule::new(Vec::new(), typ_reference);
-
-        for rule in $rules.clone() {
-            if rule.typ() == typ_reference {
-                the_rule = rule;
-            }
-        }
-
-        the_rule
-    }};
-}
-
-#[macro_export]
-macro_rules! add_rule {
-    ( $rules:expr, $typ:expr , $content:expr) => {
-        {
-            let mut rule = find_rule!($rules, $typ);
-            rule.add($content.to_string());
-            $rules.push(rule);
-        }
-    };
-}
-
-#[macro_export]
-macro_rules! add_regex_rule {
-    ( $rules:expr, $typ:expr , $content:expr) => {
-        {
-            let mut rule = find_rule!($rules, $typ);
-            rule.add_regex($content.to_string());
-            $rules.push(rule);
-        }
-    };
-}
-
-#[macro_export]
-macro_rules! add_multi_line_rule {
-    ( $rules:expr, $typ:expr , $open:expr, $close:expr) => {
-        {
-            let mut rule = find_rule!($rules, $typ);
-            rule.add_multi_line($open.to_string(), $close.to_string());
-            $rules.push(rule);
-        }
-    };
-}
-
-fn build_rules() -> Vec<LexingRule<'static>> {
+fn build_rules() -> Vec<LexingRule> {
     let mut rules: Vec<LexingRule> = Vec::new();
 
     // General whitespace
@@ -88,19 +40,6 @@ fn build_rules() -> Vec<LexingRule<'static>> {
     // Comments
     add_regex_rule!(rules, Whitespace, "//[^\\r\\n]*");
     add_multi_line_rule!(rules, Whitespace, "/*", "*/");
-
-    add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:]*");
-    add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
-    add_regex_rule!(rules, BinaryLiteral, "b[01_]*");
-    add_regex_rule!(rules, OctalLiteral, "o[0-7_]*");
-    add_regex_rule!(rules, DecimalLiteral, "[0-9_]*");
-    add_regex_rule!(rules, HexadecimalLiteral, "#[0-9a-fA-F_]*");
-
-    add_rule!(rules, BooleanLiteral, "true");
-    add_rule!(rules, BooleanLiteral, "false");
-
-    add_multi_line_rule!(rules, StringLiteral, "\"", "\"");
-    add_multi_line_rule!(rules, CharLiteral, "'", "'");
 
     add_rule!(rules, Semicolon, ";");
     add_rule!(rules, Comma, ",");
@@ -183,6 +122,25 @@ fn build_rules() -> Vec<LexingRule<'static>> {
     add_rule!(rules, Public, "pub");
     add_rule!(rules, Protected, "protected");
     add_rule!(rules, Protected, "prot");
+
+    /*
+        Literals must start here.
+        We don't want that any other keyword gets tokenized as an identifier literal,
+        so we check for identifier literals at last
+     */
+
+    add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:]*");
+    add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
+    add_regex_rule!(rules, BinaryLiteral, "b[01_]*");
+    add_regex_rule!(rules, OctalLiteral, "o[0-7_]*");
+    add_regex_rule!(rules, DecimalLiteral, "[0-9_]*");
+    add_regex_rule!(rules, HexadecimalLiteral, "#[0-9a-fA-F_]*");
+
+    add_rule!(rules, BooleanLiteral, "true");
+    add_rule!(rules, BooleanLiteral, "false");
+
+    add_multi_line_rule!(rules, StringLiteral, "\"", "\"");
+    add_multi_line_rule!(rules, CharLiteral, "'", "'");
 
     rules
 }

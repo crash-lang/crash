@@ -19,9 +19,9 @@ use regex::{Regex, RegexBuilder};
 use crate::token::TokenType;
 
 #[derive(Clone)]
-pub struct LexingRule<'a> {
+pub struct LexingRule {
     patterns: Vec<Regex>,
-    typ: &'a TokenType
+    typ: TokenType
 }
 
 fn regex_escape(input: String) -> String {
@@ -36,10 +36,12 @@ fn regex_escape(input: String) -> String {
             _ => {}
         }
 
-        if char.to_digit(16).unwrap() > 0xff {
+        let digit = char as u32;
+
+        if digit > 0xff {
             builder.push_str("\\u");
             builder.push_str(format!("{}04x", char).as_str());
-        } else if is_iso_control(char) {
+        } else if is_iso_control(digit) {
             builder.push_str("\\x");
             builder.push_str(format!("{}2x", char).as_str());
         } else {
@@ -50,14 +52,12 @@ fn regex_escape(input: String) -> String {
     builder
 }
 
-fn is_iso_control(character: char) -> bool {
-    let as_int = character.to_digit(16).unwrap();
-
-    return as_int <= 0x9F && (as_int >= 0x7F || (0 == (as_int >> 5)));
+fn is_iso_control(digit: u32) -> bool {
+    return digit <= 0x9F && (digit >= 0x7F || (0 == (digit >> 5)));
 }
 
-impl<'a> LexingRule<'a> {
-    pub fn new(patterns: Vec<Regex>, typ: &'a TokenType) -> Self {
+impl LexingRule {
+    pub fn new(patterns: Vec<Regex>, typ: TokenType) -> Self {
         Self { patterns, typ }
     }
 
@@ -101,7 +101,7 @@ impl<'a> LexingRule<'a> {
         &self.patterns
     }
 
-    pub fn typ(&self) -> &TokenType {
-        &self.typ
+    pub fn typ(&self) -> TokenType {
+        self.typ.clone()
     }
 }

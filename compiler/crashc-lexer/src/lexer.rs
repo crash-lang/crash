@@ -20,13 +20,13 @@ use crate::rule::LexingRule;
 use crate::token::Token;
 use crate::token::TokenType::{Eof, Whitespace};
 
-pub(crate) struct Lexer<'a> {
-    rules: Vec<LexingRule<'a>>
+pub(crate) struct Lexer {
+    rules: Vec<LexingRule>
 }
 
-impl<'a> Lexer<'a> {
+impl Lexer {
 
-    pub fn new(rules: Vec<LexingRule<'a>>) -> Lexer<'a> {
+    pub fn new(rules: Vec<LexingRule>) -> Lexer {
         Self { rules }
     }
 
@@ -81,14 +81,15 @@ impl<'a> Lexer<'a> {
                 continue;
             }
 
-            panic!("Unknown token")
+            println!("Unknown token at {:?}:{:?}", current_line, current_column);
+            std::process::exit(1);
         }
 
         if skip_whitespace {
-            tokens.retain(|token| *token.typ() != Whitespace);
+            tokens.retain(|token| token.typ() != Whitespace);
         }
 
-        tokens.push(Token::new(&Eof, String::new(), Position::new(0, 0)));
+        tokens.push(Token::new(Eof, String::new(), Position::new(0, 0)));
 
         tokens
     }

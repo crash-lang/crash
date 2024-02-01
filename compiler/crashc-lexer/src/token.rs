@@ -17,13 +17,14 @@
 
 use crate::position::{Position, TokenPosition};
 
-pub struct Token<'a> {
-    typ: &'a TokenType,
+#[derive(Debug)]
+pub struct Token {
+    typ: TokenType,
     value: String,
     position: TokenPosition,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum TokenType {
     Eof,
     Whitespace,
@@ -112,8 +113,8 @@ pub enum TokenType {
     Protected
 }
 
-impl<'a> Token<'a> {
-    pub(crate) fn new(typ: &'a TokenType, value: String, position: Position) -> Token<'a> {
+impl Token {
+    pub(crate) fn new(typ: TokenType, value: String, position: Position) -> Token {
         let length = value.len();
         Token {
             typ,
@@ -125,13 +126,15 @@ impl<'a> Token<'a> {
         }
     }
 
-    pub fn typ(&self) -> &TokenType {
-        &self.typ
+    pub fn typ(&self) -> TokenType {
+        self.typ.clone()
     }
+
     pub fn value(&self) -> &str {
         &self.value
     }
-    pub fn position(&self) -> &TokenPosition {
-        &self.position
+
+    pub fn position(&self) -> TokenPosition {
+        self.position
     }
 }
