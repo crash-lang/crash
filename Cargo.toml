@@ -1,5 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
-    "compiler/crashc"
+    "compiler/crashc",
+    "compiler/crashc-ast",
+    "compiler/crashc-llvm",
+    "compiler/crashc-lexer"
 ]

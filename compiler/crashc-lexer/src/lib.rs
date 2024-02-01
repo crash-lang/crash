@@ -52,12 +52,16 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Question, "?");
     add_rule!(rules, Colon, ":");
     add_rule!(rules, At, "@");
+    add_rule!(rules, Dots, "...");
+
 
     add_rule!(rules, Add, "+");
     add_rule!(rules, Subtract, "-");
     add_rule!(rules, Multiply, "*");
     add_rule!(rules, Divide, "/");
+    add_rule!(rules, Modulus, "mod");
     add_rule!(rules, Modulus, "%");
+
 
     add_rule!(rules, Equals, "==");
     add_rule!(rules, NotEquals, "!=");
@@ -69,6 +73,7 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, And, "&&");
     add_rule!(rules, Or, "||");
 
+
     add_rule!(rules, BitwiseOr, "|");
     add_rule!(rules, BitwiseAnd, "&");
     add_rule!(rules, BitwiseXor, "^");
@@ -77,29 +82,43 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, RightShift, ">>");
     add_rule!(rules, UnsignedRightShift, ">>>");
 
+
     add_rule!(rules, Assign, "=");
     add_rule!(rules, Mutable, "mut");
+
 
     add_rule!(rules, I8, "i8");
     add_rule!(rules, I8, "byte");
     add_rule!(rules, U8, "u8");
+
     add_rule!(rules, I16, "i16");
     add_rule!(rules, I16, "short");
+
     add_rule!(rules, U16, "u16");
+
     add_rule!(rules, I32, "i32");
     add_rule!(rules, I32, "int");
+
     add_rule!(rules, U32, "u32");
+
     add_rule!(rules, I64, "i64");
     add_rule!(rules, I64, "long");
+
     add_rule!(rules, U64, "u64");
+
     add_rule!(rules, I128, "i128");
+
     add_rule!(rules, U128, "u128");
+
     add_rule!(rules, F32, "f32");
     add_rule!(rules, F32, "float");
+
     add_rule!(rules, F64, "f64");
     add_rule!(rules, F64, "double");
+
     add_rule!(rules, Boolean, "boolean");
     add_rule!(rules, Boolean, "bool");
+
     add_rule!(rules, Char, "char");
 
 
@@ -111,6 +130,7 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Return, "return");
     add_rule!(rules, Break, "break");
     add_rule!(rules, Continue, "continue");
+
 
     add_rule!(rules, Class, "class");
     add_rule!(rules, Interface, "interface");

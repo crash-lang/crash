@@ -29,6 +29,7 @@ pub enum TokenType {
     Eof,
     Whitespace,
 
+    // Literals
     IdentifierLiteral,
     BinaryLiteral,
     OctalLiteral,
@@ -39,6 +40,7 @@ pub enum TokenType {
     StringLiteral,
     BooleanLiteral,
 
+    // Primitive types
     I8,
     U8,
     I16,
@@ -54,6 +56,7 @@ pub enum TokenType {
     Boolean,
     Char,
 
+    // Symbols
     Semicolon,
     Comma,
     OpenBrace,
@@ -65,13 +68,16 @@ pub enum TokenType {
     Question,
     Colon,
     At,
+    Dots,
 
+    // Math
     Add,
     Subtract,
     Multiply,
     Divide,
     Modulus,
 
+    // Logic
     Equals,
     NotEquals,
     Greater,
@@ -82,6 +88,7 @@ pub enum TokenType {
     And,
     Or,
 
+    // Bitwise and shifting
     BitwiseOr,
     BitwiseAnd,
     BitwiseXor,
@@ -93,6 +100,7 @@ pub enum TokenType {
     Assign,
     Mutable,
 
+    // Statements
     If,
     Switch,
     Match,
@@ -102,6 +110,7 @@ pub enum TokenType {
     Break,
     Continue,
 
+    // General keywords
     Class,
     Interface,
     Enum,
@@ -109,6 +118,7 @@ pub enum TokenType {
     Import,
     Implements,
 
+    // Modifiers
     Public,
     Protected
 }
