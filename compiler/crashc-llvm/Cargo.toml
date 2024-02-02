@@ -1,8 +1,0 @@
-[package]
-name = "crashc_llvm"
-version = "0.0.0"
-edition = "2021"
-
-[dependencies]
-inkwell = { version = "0.2.0", features = ["llvm16-0"]}
-#crashc_ast = { path = "../crashc-ast" }

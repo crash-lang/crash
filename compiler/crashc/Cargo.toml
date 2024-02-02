@@ -6,8 +6,6 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.4.12", features = ["derive"] }
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-#crashc_ast = { path = "../crashc-ast" }
 crashc_lexer = { path = "../crashc-lexer" }
 crashc_parser = { path = "../crashc-parser" }
 crashc_tree = { path = "../crashc-tree" }
-crashc_llvm = { path = "../crashc-llvm" }
