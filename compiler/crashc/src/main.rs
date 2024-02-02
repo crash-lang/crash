@@ -15,11 +15,22 @@
  */
 
 use clap::Parser;
+use crashc_parser::parse_module;
 
 #[tokio::main]
 async fn main() {
     //let args = Args::parse();
 
+    let module = parse_module("test".to_string(), "crash".to_string(), r"
+        public construct prot {
+mut {
+}
+}
+        ".to_string()).await;
+
+    for statement in module.statements() {
+        println!("Statement {:?}", statement);
+    }
 }
 
 #[derive(Parser, Debug)]
