@@ -15,40 +15,10 @@
  *
  */
 
-pub enum AccessModifier {
-    Public,
-    Private,
-    Protected,
-    Internal
-}
-
-pub struct Type {
-    typ: TypeDecl,
-    name: Option<String>,
-}
-
-/// We need this thing to differentiate a primitive type from an object like enum or class
-pub enum TypeDecl {
-    Obj,
-    Generic { extends: Vec<Type> },
-    U8,
-    I8,
-    U16,
-    I16,
-    U32,
-    I32,
-    U64,
-    I64,
-    U128,
-    I128,
-    F32,
-    F64,
-    Bool,
-    Char,
-}
-
-impl Type {
-    pub fn new(typ: TypeDecl, name: Option<String>) -> Self {
-        Type { typ, name }
-    }
+#[macro_export]
+macro_rules! unexpected_eof {
+    ($module_name:expr, $position:expr) => {
+        println!("Unexpected end of file in module {} [{:?}]", $module_name, $position);
+        std::process::exit(1);
+    };
 }
