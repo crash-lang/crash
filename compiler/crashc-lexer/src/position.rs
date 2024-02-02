@@ -16,20 +16,20 @@
  */
 
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct Position {
     line: u32,
     column: u32
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct TokenPosition {
     start: Position,
     end: Position
 }
 
 impl Position {
-    pub(crate) fn new(line: u32, column: u32) -> Self {
+    pub fn new(line: u32, column: u32) -> Self {
         Self { line, column }
     }
 
@@ -42,7 +42,7 @@ impl Position {
 }
 
 impl TokenPosition {
-    pub(crate) fn new(start: Position, end: Position) -> Self {
+    pub fn new(start: Position, end: Position) -> Self {
         Self { start, end }
     }
 

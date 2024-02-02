@@ -17,7 +17,7 @@
 
 use crate::position::{Position, TokenPosition};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
     typ: TokenType,
     value: String,
@@ -125,7 +125,8 @@ pub enum TokenType {
     Public,
     Protected,
     Override,
-    Mutable
+    Mutable,
+    Construct
 }
 
 impl Token {
@@ -139,6 +140,10 @@ impl Token {
                                              position.line(),
                                              position.column() + (length as u32))),
         }
+    }
+
+    pub fn eof() -> Token {
+        Self::new(TokenType::Eof, "".to_string(), Position::new(0, 0))
     }
 
     pub fn typ(&self) -> TokenType {

@@ -150,6 +150,7 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Protected, "prot");
     add_rule!(rules, Override, "override");
     add_rule!(rules, Mutable, "mut");
+    add_rule!(rules, Construct, "construct");
 
     /*
         Literals must start here.
