@@ -15,5 +15,5 @@ and the overall language design.
 - There is no null. You have to use a Optional enum.
 - There are no Exceptions. So you won't find throw or try-catch statements.
   You would have to use a Result enum.
-- Reflection is kind of an actual safe feature. You cannot mess it up.
+- "Reflection" is kind of an actual safe feature. You cannot mess it up.
 - Just everything is safe.
