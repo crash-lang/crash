@@ -19,7 +19,7 @@ Java, and Rust. Its syntax is familiar to those acquainted with programming fund
 with a reduced set of keywords. Noteworthy is the absence of certain keywords like `void` or `private`, 
 as default behaviors handle these aspects.
 
-Built on the [LLVM](https://llvm.org) compiler framework, Crash is an Ahead-of-Time (AOT) compiled language, 
+Crash is an Ahead-of-Time (AOT) compiled language, 
 offering efficiency and performance. Notably, source-code files in Crash are identified by the `.crash` extension. 
 This language provides a balance between simplicity and power, 
 making it accessible to both beginners and experienced developers.
