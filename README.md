@@ -38,7 +38,7 @@ Please visit [our Website](https://crash-lang.org/install) for install instructi
 A Hello-world program in Crash:
 ```crash
 main() {
-    info("Hello world!");
+    println("Hello world!");
 }
 ```
 
