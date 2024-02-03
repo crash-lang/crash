@@ -29,6 +29,9 @@ There may be more in the future.
 Here a quick flowchart of how your code slides through all Crashc-modules.
 
 ```mermaid
+---
+title: Module Flowchart
+---
 flowchart TD;
     classDef green stroke:#0f0
     classDef red stroke:#f00
