@@ -1,20 +1,19 @@
 # Crash Compiler
 
-The compiler is the heart of the every language.
-Until we're not able to program and run any compiler in Crash itself,
+The compiler is the heart of every language.
+Until we're not able to program or run any compiler in Crash itself,
 we will continue writing the Crash Compiler in Rust.
 
 #### State Declaration
 
-Crash is a completely new language. So we have a lot of work to do, before
-we can run the first programs innit.
+Crash is a completely new language, so we have a lot of work to do, before
+we can run the first programs with it.
 
-These Symbols and their colors show the current state of everything, 
-that should work in the future.
+These Symbols and their colors show the current state of some feature.
 
+- (✅) This feature is fully implemented and it's working flawless
+- (🚧) We're making progress on implementing this feature; Don't expect it to function the way it should
 - (❌) This feature is not implemented yet
-- (🚧) Feature is in progress and may already be implemented; Don't expect it to function the way it should
-- (✅) This feature is fully implemented and working flawless
 
 ### Compiler Targets
 Following targets are planned to be supported.
