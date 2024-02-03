@@ -32,34 +32,33 @@ Here a quick flowchart of how your code slides through all Crashc-modules.
 ---
 title: Module Flowchart
 ---
-graph TD;
+flowchart TD;
     classDef green stroke:#0f0
     classDef red stroke:#f00
     classDef yellow stroke:#ffff00
 
-    CODE[Source *.crash] --> |Crashc| LEXER
+    CODE["Source *.crash"] --> |"Crashc"| LEXER
 
-    LEXER(🚧 Lexer) --> PARSER
-    LEXER:::yellow --> |If something's wrong| E_REPORT
+    LEXER("🚧 Lexer") --> PARSER
+    LEXER:::yellow --> |"If something's wrong"| E_REPORT
 
-    TREE(🚧 Language Tree) --> |Gets build by| PARSER
+    TREE("🚧 Language Tree") --> |"Gets build by"| PARSER
     TREE:::yellow
 
-    PARSER(🚧 Parser) --> |Abstract Syntax Tree| ANALYSER
+    PARSER("🚧 Parser") --> |"Abstract Syntax Tree"| ANALYSER
     PARSER:::yellow
 
     ANALYSER:::red
-    ANALYSER(❌ Analyser) --> |If something's wrong| E_REPORT
-    ANALYSER --> |Everything's fine| OPTIMIZER
+    ANALYSER("❌ Analyser") --> |"If something's wrong"| E_REPORT
+    ANALYSER --> |"Everything's fine"| OPTIMIZER
 
     E_REPORT:::red
-    E_REPORT{❌ Error report}
+    E_REPORT{"❌ Error report"}
 
     OPTIMIZER:::red
-    OPTIMIZER(❌ Optimizer) --> BACKEND
+    OPTIMIZER("❌ Optimizer") --> BACKEND
 
     BACKEND:::red
-    BACKEND(❌ Compiler backend)
-
+    BACKEND("❌ Compiler backend")
 ```
 
