@@ -23,7 +23,7 @@ use crashc_tree::types::{NONE_TYPE, type_by_token};
 
 use crate::statement::parse_statement;
 use crate::stream::TokenStream;
-use crate::unexpected_eof;
+use crate::*;
 
 pub fn try_parse_modifier_block_statement(stream: &mut TokenStream) -> Option<ModifierBlock> {
     if !is_modifier(stream) {
@@ -65,7 +65,7 @@ pub fn try_parse_modifier_block_statement(stream: &mut TokenStream) -> Option<Mo
         }
         break;
     }
-    unexpected_eof!(stream.module_name(), stream.current_pos());
+    unexpected_eof!(stream);
 }
 
 pub struct ModifierParser {

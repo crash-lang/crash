@@ -18,6 +18,7 @@
 mod statement;
 mod stream;
 mod modifier;
+mod import;
 mod macros;
 
 use crashc_tree::{Module};
@@ -33,7 +34,6 @@ pub async fn parse_module(module_name: String, package_name: String, content: St
         if let Some(statement) = parse_statement(&mut stream) {
             statements.push(statement);
         }
-        break
     }
 
     Module::new(module_name, package_name, content, statements)

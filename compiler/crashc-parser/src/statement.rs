@@ -15,6 +15,7 @@
  *
  */
 
+use crate::import::try_parse_import_statement;
 use crashc_tree::statements::StatementType;
 
 use crate::modifier::*;
@@ -27,6 +28,11 @@ pub fn parse_statement(stream: &mut TokenStream) -> Option<StatementType> {
     // We may have a modifier block
     if let Some(block) = try_parse_modifier_block_statement(stream) {
         return Some(StatementType::ModifierBlock(block));
+    }
+    
+    // We may have some imports
+    if let Some(import) = try_parse_import_statement(stream) {
+        return Some(StatementType::Import(import));
     }
 
     None

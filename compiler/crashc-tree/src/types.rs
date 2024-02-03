@@ -153,7 +153,7 @@ pub fn type_by_token<'a>(token: Token) -> Type<'a> {
     NONE_TYPE
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Type<'a> {
     name: &'a str,
     unsigned: bool,
