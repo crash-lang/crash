@@ -1,6 +1,5 @@
 # Crash Compiler
-
-The compiler is the heart of every language.
+**The compiler is the heart of every language.**
 Until we're not able to program or run any compiler in Crash itself,
 we will continue writing the Crash Compiler in Rust.
 
