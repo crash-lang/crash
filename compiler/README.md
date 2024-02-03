@@ -40,16 +40,17 @@ flowchart TD;
     CODE["Source *.crash"] --> |"Crashc"| LEXER
 
     LEXER("🚧 Lexer") --> PARSER
-    LEXER:::yellow --> |"If something's wrong"| E_REPORT
+    LEXER:::yellow --> |"Unrecognizable content"| E_REPORT
 
     TREE("🚧 Language Tree") --> |"Gets build by"| PARSER
     TREE:::yellow
 
     PARSER("🚧 Parser") --> |"Abstract Syntax Tree"| ANALYSER
     PARSER:::yellow
+    PARSER --> |"Invalid syntax"| E_REPORT
 
     ANALYSER:::red
-    ANALYSER("❌ Analyser") --> |"If something's wrong"| E_REPORT
+    ANALYSER("❌ Analyser") --> |"Something's messed up"| E_REPORT
     ANALYSER --> |"Everything's fine"| OPTIMIZER
 
     E_REPORT:::red
