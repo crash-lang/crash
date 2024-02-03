@@ -32,7 +32,7 @@ Here a quick flowchart of how your code slides through all Crashc-modules.
 ---
 title: Module Flowchart
 ---
-flowchart TD;
+graph TD;
     classDef green stroke:#0f0
     classDef red stroke:#f00
     classDef yellow stroke:#ffff00
