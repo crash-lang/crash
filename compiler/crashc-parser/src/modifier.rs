@@ -91,6 +91,10 @@ impl ModifierParser {
         let modifier = Modifier::from_token(self.stream.peak(self.peak));
 
         if modifier == Modifier::None {
+            if self.peak == 0 {
+                return;
+            }
+
             self.position = TokenPosition::new(
                 *self.position.start(),
                 *self.stream.peak(self.peak - 1).position().end(),

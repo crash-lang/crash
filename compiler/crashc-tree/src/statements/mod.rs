@@ -17,15 +17,21 @@
 
 pub mod import;
 pub mod modifier_block;
+pub mod function;
+pub mod constructor;
 
 use crashc_lexer::position::TokenPosition;
+use crate::statements::constructor::Constructor;
+use crate::statements::function::Function;
 use crate::statements::import::Import;
 use crate::statements::modifier_block::ModifierBlock;
 
 #[derive(Clone, Debug)]
 pub enum StatementType {
     Import(Import),
-    ModifierBlock(ModifierBlock)
+    ModifierBlock(ModifierBlock),
+    Function(Function),
+    Constructor(Constructor),
 }
 
 pub trait Statement {

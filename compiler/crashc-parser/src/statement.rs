@@ -17,6 +17,7 @@
 
 use crate::import::try_parse_import_statement;
 use crashc_tree::statements::StatementType;
+use crate::function::try_parse_function_statement;
 
 use crate::modifier::*;
 use crate::stream::TokenStream;
@@ -24,6 +25,11 @@ use crate::stream::TokenStream;
 pub fn parse_statement(stream: &mut TokenStream) -> Option<StatementType> {
     // We may have a function/field/variable/constructor
     //if is_type(stream) {}
+
+    // We may have a function
+    if let Some(function) = try_parse_function_statement(stream) {
+        return Some(StatementType::Function(function));
+    }
 
     // We may have a modifier block
     if let Some(block) = try_parse_modifier_block_statement(stream) {

@@ -20,6 +20,8 @@ mod stream;
 mod modifier;
 mod import;
 mod macros;
+mod function;
+mod constructor;
 
 use crashc_tree::{Module};
 use crate::statement::parse_statement;

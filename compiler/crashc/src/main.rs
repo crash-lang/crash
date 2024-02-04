@@ -22,10 +22,7 @@ async fn main() {
     //let args = Args::parse();
 
     let module = parse_module("test".to_string(), "crash".to_string(), r"
-        public construct prot {
-mut {
-}
-}
+        public test()
         ".to_string()).await;
 
     for statement in module.statements() {

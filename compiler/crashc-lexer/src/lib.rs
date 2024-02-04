@@ -142,7 +142,6 @@ fn build_rules() -> Vec<LexingRule> {
     add_rule!(rules, Annotation, "annotation");
     add_rule!(rules, Import, "import");
     add_rule!(rules, Implements, "implements");
-    add_rule!(rules, Extends, "extends");
 
     add_rule!(rules, Public, "public");
     add_rule!(rules, Public, "pub");

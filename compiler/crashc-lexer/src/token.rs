@@ -119,7 +119,6 @@ pub enum TokenType {
     Annotation,
     Import,
     Implements,
-    Extends,
 
     // Modifiers
     Public,
