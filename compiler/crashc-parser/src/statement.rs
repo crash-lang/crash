@@ -15,11 +15,11 @@
  *
  */
 
-use crate::import::try_parse_import_statement;
 use crashc_tree::statements::StatementType;
-use crate::function::try_parse_function_statement;
+use crate::module::function::try_parse_function_statement;
+use crate::module::import::try_parse_import_statement;
 
-use crate::modifier::*;
+use crate::module::modifier::*;
 use crate::stream::TokenStream;
 
 pub fn parse_statement(stream: &mut TokenStream) -> Option<StatementType> {

@@ -23,6 +23,14 @@ use crashc_tree::statements::import::Import;
 use crate::stream::TokenStream;
 use crate::*;
 
+/// import org.example.ExampleModule;
+///
+/// or
+///
+/// import {
+///     org.example.ExampleModule,
+///     org.example.AnotherModule
+/// }
 pub fn try_parse_import_statement(stream: &mut TokenStream) -> Option<Import> {
     if !stream.matches(Import) {
         return None;

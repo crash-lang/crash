@@ -15,26 +15,23 @@
  *
  */
 
-mod statement;
-mod stream;
-mod macros;
-mod module;
-mod body;
+use crashc_lexer::token::TokenType;
+use crashc_tree::statements::if_statement::If;
+use crate::stream::TokenStream;
 
-use crashc_tree::Module;
-use crate::statement::parse_statement;
-use crate::stream::build_stream;
-
-pub async fn parse_module(module_name: String, package_name: String, content: String) -> Module {
-    let mut statements = Vec::new();
-
-    let mut stream = build_stream(content.clone(), module_name.clone());
-
-    while stream.has_more_tokens() {
-        if let Some(statement) = parse_statement(&mut stream) {
-            statements.push(statement);
-        }
+/// if something {
+///     doSomething();
+/// }
+pub fn try_parse_if_statement(stream: &mut TokenStream) -> Option<If> {
+    if !stream.matches(TokenType::If) {
+        return None;
     }
 
-    Module::new(module_name, package_name, content, statements)
+    let mut position = stream.current_pos();
+
+    stream.advance();
+
+
+
+    None
 }

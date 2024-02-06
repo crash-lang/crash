@@ -19,6 +19,7 @@ pub mod import;
 pub mod modifier_block;
 pub mod function;
 pub mod constructor;
+pub mod if_statement;
 
 use crashc_lexer::position::TokenPosition;
 use crate::statements::constructor::Constructor;
@@ -32,6 +33,7 @@ pub enum StatementType {
     ModifierBlock(ModifierBlock),
     Function(Function),
     Constructor(Constructor),
+    If(If)
 }
 
 pub trait Statement {

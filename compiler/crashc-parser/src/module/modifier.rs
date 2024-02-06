@@ -25,6 +25,8 @@ use crate::statement::parse_statement;
 use crate::stream::TokenStream;
 use crate::*;
 
+/// pub mut {
+/// }
 pub fn try_parse_modifier_block_statement(stream: &mut TokenStream) -> Option<ModifierBlock> {
     if !is_modifier(stream) {
         return None;

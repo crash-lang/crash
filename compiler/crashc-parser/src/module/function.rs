@@ -18,7 +18,7 @@
 use crashc_lexer::position::TokenPosition;
 use crashc_lexer::token::TokenType::{IdentifierLiteral, OpenBrace};
 use crashc_tree::statements::function::Function;
-use crate::modifier::ModifierParser;
+use crate::module::modifier::ModifierParser;
 use crate::stream::TokenStream;
 
 pub fn try_parse_function_statement(stream: &mut TokenStream) -> Option<Function> {

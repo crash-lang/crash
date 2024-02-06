@@ -15,26 +15,4 @@
  *
  */
 
-mod statement;
-mod stream;
-mod macros;
-mod module;
-mod body;
-
-use crashc_tree::Module;
-use crate::statement::parse_statement;
-use crate::stream::build_stream;
-
-pub async fn parse_module(module_name: String, package_name: String, content: String) -> Module {
-    let mut statements = Vec::new();
-
-    let mut stream = build_stream(content.clone(), module_name.clone());
-
-    while stream.has_more_tokens() {
-        if let Some(statement) = parse_statement(&mut stream) {
-            statements.push(statement);
-        }
-    }
-
-    Module::new(module_name, package_name, content, statements)
-}
+mod if_statement;
