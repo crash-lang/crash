@@ -15,26 +15,13 @@
  *
  */
 
-use crashc_lexer::position::TokenPosition;
-use crate::define_statement;
-use crate::misc::Modifier;
-use crate::statements::{StatementType, Statement};
+use crate::expr::Expr;
+use crate::position::StructurePosition;
 
-#[derive(Clone, Debug)]
-pub struct ModifierBlock {
-    position: TokenPosition,
-    modifiers: Vec<Modifier>,
-    statements: Vec<StatementType>
+pub struct MatchStatement {
+    position: StructurePosition,
+    expr: Expr,
+    //TODO add missing fields
 }
 
-define_statement!(ModifierBlock);
-
-impl ModifierBlock {
-    pub fn new(position: TokenPosition, modifiers: Vec<Modifier>, statements: Vec<StatementType>) -> Self {
-        Self { position, modifiers, statements }
-    }
-    
-    pub fn statements(&self) -> &Vec<StatementType> {
-        &self.statements
-    }
-}
+//TODO impl

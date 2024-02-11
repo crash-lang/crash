@@ -15,23 +15,23 @@
  *
  */
 
-use crashc_lexer::token::TokenType::OpenBrace;
-use crashc_tree::statements::function::Function;
-use crate::module::modifier::ModifierParser;
-use crate::stream::TokenStream;
+use crashc_lexer::token::TokenPosition;
 
-pub fn try_parse_constructor_statement(stream: &mut TokenStream) -> Option<Function> {
-    // Maybe we have some Access-Modifiers
-    let modifier_parser = ModifierParser::parse(stream);
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+pub struct StructurePosition {
+    start: TokenPosition,
+    end: TokenPosition
+}
 
-    let mut position = modifier_parser.position();
-
-    // We don't have a constructor
-    if stream.peak(modifier_parser.peak()).typ() != OpenBrace {
-        return None;
+impl StructurePosition {
+    pub fn new(start: TokenPosition, end: TokenPosition) -> Self {
+        Self { start, end }
     }
 
-    //TODO read parameters and parse body
-
-    None
+    pub fn start(&self) -> TokenPosition {
+        self.start
+    }
+    pub fn end(&self) -> TokenPosition {
+        self.end
+    }
 }

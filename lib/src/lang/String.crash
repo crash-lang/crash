@@ -15,18 +15,5 @@
  *
  */
 
-use crashc_lexer::position::TokenPosition;
-use crate::define_expression;
-use crate::expressions::{Expression, ExpressionType};
-
-#[derive(Clone, Debug)]
-pub struct FunctionCall {
-    position: TokenPosition,
-
-}
-
-define_expression!(FunctionCall);
-
-impl FunctionCall {
-    //TODO function call
+class {
 }

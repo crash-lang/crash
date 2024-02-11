@@ -15,7 +15,7 @@
  *
  */
 
-use crate::position::{Position, TokenPosition};
+pub use crate::position::{Position, ZERO_TOK_POS, TokenPosition};
 
 #[derive(Debug, Clone)]
 pub struct Token {
@@ -24,7 +24,7 @@ pub struct Token {
     position: TokenPosition,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum TokenType {
     Eof,
     Whitespace,

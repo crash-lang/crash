@@ -16,13 +16,13 @@
  */
 
 use crate::lexer::Lexer;
-use crate::rule::LexingRule;
+use crate::lexer::LexingRule;
 use crate::token::Token;
 use crate::token::TokenType::*;
 
 pub mod token;
-pub mod position;
 
+mod position;
 mod rule;
 mod lexer;
 mod macros;
@@ -157,15 +157,15 @@ fn build_rules() -> Vec<LexingRule> {
         so we check for identifier literals at last
      */
 
+    add_rule!(rules, BooleanLiteral, "true");
+    add_rule!(rules, BooleanLiteral, "false");
+
     add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
     add_regex_rule!(rules, BinaryLiteral, "b[01_]*");
     add_regex_rule!(rules, OctalLiteral, "o[0-7_]*");
     add_regex_rule!(rules, DecimalLiteral, "[0-9_]*");
     add_regex_rule!(rules, HexadecimalLiteral, "#[0-9a-fA-F_]*");
     add_regex_rule!(rules, IdentifierLiteral, "[a-zA-Z.:][a-zA-Z.:0-9]*");
-
-    add_rule!(rules, BooleanLiteral, "true");
-    add_rule!(rules, BooleanLiteral, "false");
 
     add_multi_line_rule!(rules, StringLiteral, "\"", "\"");
     add_multi_line_rule!(rules, CharLiteral, "'", "'");

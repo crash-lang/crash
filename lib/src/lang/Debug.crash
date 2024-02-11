@@ -15,4 +15,7 @@
  *
  */
 
-mod if_statement;
+interface {
+
+    pub String toString();
+}

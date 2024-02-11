@@ -15,18 +15,16 @@
  */
 
 use clap::Parser;
-use crashc_parser::parse_module;
+use crashc_lexer::tokenize;
 
 #[tokio::main]
 async fn main() {
     //let args = Args::parse();
 
-    let module = parse_module("test".to_string(), "crash".to_string(), r"
-        public test()
-        ".to_string()).await;
+    let vec = tokenize("'h'");
 
-    for statement in module.statements() {
-        println!("Statement {:?}", statement);
+    for token in vec {
+        println!("Token {:?}", token);
     }
 }
 

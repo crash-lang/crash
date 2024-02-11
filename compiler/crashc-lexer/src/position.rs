@@ -15,6 +15,16 @@
  *
  */
 
+pub const ZERO_TOK_POS: TokenPosition = TokenPosition {
+    start: Position {
+        line: 0,
+        column: 0,
+    },
+    end: Position {
+        line: 0,
+        column: 0
+    }
+};
 
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct Position {

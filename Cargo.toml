@@ -3,6 +3,5 @@ resolver = "2"
 members = [
     "compiler/crashc",
     "compiler/crashc-lexer",
-    "compiler/crashc-tree",
     "compiler/crashc-parser"
 ]

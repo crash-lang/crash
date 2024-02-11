@@ -15,30 +15,25 @@
  *
  */
 
-use crashc_lexer::token::{Token, TokenType};
-use crate::misc::Modifier::*;
+use crate::stream::TokenStream;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum Modifier {
-    Public,
-    Protected,
-    Private,
-    Override,
-    Mutable,
-    Construct,
-    None
+pub enum ArithmeticExpr {
+    Addition(Box<ArithmeticExpr>, Box<ArithmeticExpr>),
+    Subtraction(Box<ArithmeticExpr>, Box<ArithmeticExpr>),
+    Multiplication(Box<ArithmeticExpr>, Box<ArithmeticExpr>),
+    Division(Box<ArithmeticExpr>, Box<ArithmeticExpr>),
+    Modulus(Box<ArithmeticExpr>, Box<ArithmeticExpr>),
+
+    Float(f64),
+    Integer(u128)
 }
 
-impl Modifier {
-    pub fn from_token(token: Token) -> Modifier {
-        let typ = token.typ();
-        match typ {
-            TokenType::Public => Public,
-            TokenType::Protected => Protected,
-            TokenType::Override => Override,
-            TokenType::Mutable => Mutable,
-            TokenType::Construct => Construct,
-            _ => None,
-        }
+
+
+impl TokenStream {
+
+    pub(crate) fn try_parse_arithmetic_expr(&mut self) -> Option<ArithmeticExpr> {
+        None
     }
+
 }

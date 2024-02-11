@@ -15,23 +15,31 @@
  *
  */
 
-use crashc_lexer::token::TokenType;
-use crashc_tree::statements::if_statement::If;
+mod ifs;
+mod imports;
+mod matches;
+
+use crate::statement::ifs::IfStatement;
+use crate::statement::imports::ImportStatement;
 use crate::stream::TokenStream;
 
-/// if something {
-///     doSomething();
-/// }
-pub fn try_parse_if_statement(stream: &mut TokenStream) -> Option<If> {
-    if !stream.matches(TokenType::If) {
-        return None;
+pub enum Statement {
+    Import(ImportStatement),
+
+    If(IfStatement)
+}
+
+impl TokenStream {
+
+    pub(super) fn try_parse_statement(&mut self) -> Option<Statement> {
+        if let Some(import_statement) = self.try_parse_import_statement() {
+            return Some(Statement::Import(import_statement));
+        }
+
+        if let Some(if_statement) = self.try_parse_if_statement() {
+            return Some(Statement::If(if_statement));
+        }
+
+        None
     }
-
-    let mut position = stream.current_pos();
-
-    stream.advance();
-
-
-
-    None
 }

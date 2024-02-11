@@ -15,32 +15,23 @@
  *
  */
 
-use crashc_lexer::position::TokenPosition;
-use crashc_lexer::token::{Token, TokenType};
-use crashc_lexer::token::TokenType::*;
-use crashc_lexer::tokenize;
+use crashc_lexer::token::Token;
+use crashc_lexer::token::TokenType::Eof;
 
-pub fn build_stream(content: String, module_name: String) -> TokenStream {
-    let tokens = tokenize(content.as_str());
-
-    TokenStream {
-        module_name,
-        source: content,
-        tokens,
-        index: 0,
-    }
-}
-
-#[derive(Clone)]
 pub struct TokenStream {
     module_name: String,
+    original: Vec<Token>,
     source: String,
     tokens: Vec<Token>,
-    index: usize,
+    index: usize
 }
 
 impl TokenStream {
-    pub fn has_more_tokens(&self) -> bool {
+    pub fn new(module_name: String, source: String, tokens: Vec<Token>) -> Self {
+        Self { module_name, original: tokens.clone() , source, tokens, index: 0 }
+    }
+
+    pub(crate) fn has_more_tokens(&self) -> bool {
         if self.tokens.len() <= self.index {
             return false;
         }
@@ -51,18 +42,6 @@ impl TokenStream {
         }
     }
 
-    pub fn matches(&self, token_type: TokenType) -> bool {
-        self.current().typ() == token_type
-    }
-
-    pub fn matches_value(&self, value: &str) -> bool {
-        self.current().value().eq(value)
-    }
-
-    pub fn current_pos(&self) -> TokenPosition {
-        self.current().position()
-    }
-
     fn tok_at_index(&self, index: usize) -> Token {
         match self.tokens.get(index) {
             None => Token::eof(),
@@ -70,43 +49,43 @@ impl TokenStream {
         }
     }
 
-    pub fn current(&self) -> Token {
+    pub(crate) fn current(&self) -> Token {
         self.tok_at_index(self.index)
     }
 
-    pub fn prev(&self) -> Token {
-        self.tok_at_index(self.index - 1)
+    pub(crate) fn prev(&self) -> Token {
+        self.peak(1)
     }
 
-    pub fn peak(&self, amount: usize) -> Token {
+    pub(crate) fn peak(&self, amount: usize) -> Token {
         self.tok_at_index(self.index + amount)
     }
 
-    pub fn advance(&mut self) {
-        self.index += 1
+    pub(crate) fn advance(&mut self) {
+        self.add(1)
     }
 
-    pub fn add(&mut self, index: usize) {
-        self.index += index
+    pub(crate) fn reverse(&mut self) {
+        self.remove(1)
     }
 
-    pub fn reverse(&mut self) {
-        self.index -= 1
+    pub(crate) fn add(&mut self, amount: usize) {
+        self.index += amount
     }
 
-    pub fn remove(&mut self, index: usize) {
-        self.index -= index
+    pub(crate) fn remove(&mut self, amount: usize) {
+        self.index -= amount
     }
 
-    pub fn source(self) -> String {
-        self.source
-    }
-
-    pub fn module_name(&self) -> &str {
-        &self.module_name
-    }
-    
     pub fn tokens(&self) -> &Vec<Token> {
-        &self.tokens
+        &self.original
+    }
+
+    pub fn source(&self) -> &str {
+        &self.source
+    }
+
+    pub fn module_name(self) -> String {
+        self.module_name
     }
 }

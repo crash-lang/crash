@@ -15,12 +15,11 @@
  *
  */
 
-use crate::position::Position;
-use crate::rule::LexingRule;
-use crate::token::Token;
+pub use crate::rule::LexingRule;
+use crate::token::{Position, Token};
 use crate::token::TokenType::{Eof, Whitespace};
 
-pub(crate) struct Lexer {
+pub struct Lexer {
     rules: Vec<LexingRule>
 }
 

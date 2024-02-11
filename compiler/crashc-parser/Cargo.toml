@@ -4,5 +4,4 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-crashc_tree = { path = "../crashc-tree" }
 crashc_lexer = { path = "../crashc-lexer" }

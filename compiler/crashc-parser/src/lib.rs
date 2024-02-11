@@ -15,26 +15,46 @@
  *
  */
 
-mod statement;
-mod stream;
-mod macros;
-mod module;
-mod body;
+pub use crate::stream::TokenStream;
+use crate::position::StructurePosition;
+use crate::statement::Statement;
 
-use crashc_tree::Module;
-use crate::statement::parse_statement;
-use crate::stream::build_stream;
+pub mod expr;
+pub mod stream;
+pub mod statement;
+pub mod structures;
+pub mod position;
 
-pub async fn parse_module(module_name: String, package_name: String, content: String) -> Module {
-    let mut statements = Vec::new();
+struct Module {
+    module_name: String,
+    statements: Vec<Statement>
+}
 
-    let mut stream = build_stream(content.clone(), module_name.clone());
+impl TokenStream {
 
-    while stream.has_more_tokens() {
-        if let Some(statement) = parse_statement(&mut stream) {
-            statements.push(statement);
+    pub fn parse_module(&mut self) -> Module {
+        let mut module = Module { module_name: self.module_name(), statements: Vec::new() };
+
+        loop {
+            if !self.has_more_tokens() {
+                break;
+            }
+
+            match self.try_parse_statement() {
+                None => {
+                    //TODO syntax handling
+                }
+                Some(statement) => {
+                    module.statements.push(statement);
+                }
+            }
         }
-    }
 
-    Module::new(module_name, package_name, content, statements)
+        module
+    }
+}
+
+pub trait Structure {
+
+    fn pos(&self) -> StructurePosition;
 }
