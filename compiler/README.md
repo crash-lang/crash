@@ -40,9 +40,6 @@ flowchart TD;
     LEXER("🚧 Lexer") --> PARSER
     LEXER:::yellow --> |"Unrecognizable content"| E_REPORT
 
-    TREE("🚧 Language Tree") --> |"Gets build by"| PARSER
-    TREE:::yellow
-
     PARSER("🚧 Parser") --> |"Abstract Syntax Tree"| ANALYSER
     PARSER:::yellow
     PARSER --> |"Invalid syntax"| E_REPORT
