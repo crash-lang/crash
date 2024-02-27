@@ -1,12 +1,11 @@
-
-pub(crate) const INVALID_POSITION: Position = Position {
+pub const INVALID_POS: Position = Position {
     line: -1,
-    column: -1,
+    column: -1
 };
 
-pub(crate) const INVALID_TOKEN_POSITION: TokenPosition = TokenPosition {
-    start: INVALID_POSITION,
-    end: INVALID_POSITION
+pub const INVALID_TOKEN_POS: TokenPosition = TokenPosition {
+    start: INVALID_POS,
+    end: INVALID_POS
 };
 
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
@@ -22,10 +21,6 @@ pub struct TokenPosition {
 }
 
 impl Position {
-    pub fn invalid() -> Self {
-        INVALID_POSITION
-    }
-
     pub fn new(line: i32, column: i32) -> Self {
         Self { line, column }
     }
@@ -39,18 +34,14 @@ impl Position {
 }
 
 impl TokenPosition {
-    pub fn invalid() -> Self {
-        INVALID_TOKEN_POSITION
-    }
-
     pub fn new(start: Position, end: Position) -> Self {
         Self { start, end }
     }
 
-    pub fn start(&self) -> Position {
-        self.start
+    pub fn start(&self) -> &Position {
+        &self.start
     }
-    pub fn end(&self) -> Position {
-        self.end
+    pub fn end(&self) -> &Position {
+        &self.end
     }
 }

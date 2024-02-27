@@ -1,10 +1,9 @@
-use crate::expr::literal::LiteralExpr;
-use crate::variable::Variable;
+use crate::expr::variable::VariableExpr;
 
-mod literal;
+mod variable;
 
+#[derive(Clone)]
 pub enum Expr {
-    Literal(LiteralExpr),
-    Pointer(Box<Expr>),
-    Var(Variable)
+     Var(VariableExpr),
+    
 }

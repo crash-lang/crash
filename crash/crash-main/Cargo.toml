@@ -1,9 +1,9 @@
 [package]
-name = "crasher_main"
+name = "crash_main"
 version = "0.0.0"
 edition = "2021"
 
 [dependencies]
 clap = { version = "4.4.12", features = ["derive"]}
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-crash_main = { path = "../../crash/crash-main" }
+crash_ir_parser = { path = "../../cir/cir-parser" }

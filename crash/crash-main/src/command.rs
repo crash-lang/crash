@@ -1,12 +1,11 @@
 use {
-    crash_main::styles::get_styles,
+    crate::styles::get_styles,
     clap::{Parser, Subcommand}
 };
 
 #[derive(Parser, Debug)]
 #[command(
-name = "Crasher",
-author,
+name = "Crash",
 version,
 styles=get_styles()
 )]
@@ -21,7 +20,11 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug, Clone)]
 enum Command {
-    Clean {
+    Build {
+        #[arg(short, long)]
+        input_file: String,
 
+        #[arg(short, long)]
+        output_file: String
     }
 }

@@ -5,4 +5,6 @@ edition = "2021"
 
 [dependencies]
 crash_ast = { path = "../../crash/crash-ast" }
-crash_lexer = { path = "../../crash/crash-lexer" }
+crash_ir_lexer = { path = "../cir-lexer" }
+regex = "1.10.3"
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros", "sync"] }

@@ -1,5 +1,5 @@
 [package]
-name = "crash_lexer"
+name = "crash_ir_lexer"
 version = "0.0.0"
 edition = "2021"
 

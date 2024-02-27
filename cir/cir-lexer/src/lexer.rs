@@ -1,25 +1,19 @@
-pub use {
-    crate::position::Position,
-    crate::position::TokenPosition,
-    crate::token::*,
-    crate::rule::LexingRule
-};
 
-mod position;
-mod token;
-mod rule;
-mod macros;
+pub use crate::rule::LexingRule;
+use crate::token::{Position, Token};
+use crate::token::TokenType::{Eof, Whitespace};
 
 pub struct Lexer {
     rules: Vec<LexingRule>
 }
 
 impl Lexer {
-    pub fn new(rules: Vec<LexingRule>) -> Self {
+
+    pub fn new(rules: Vec<LexingRule>) -> Lexer {
         Self { rules }
     }
 
-    pub fn tokenize<'a>(&self, mut input: String) -> Result<Vec<Token<'a>>, String> {
+    pub fn tokenize(&mut self, mut input: &str, skip_whitespace: bool) -> Vec<Token> {
         let mut tokens = Vec::new();
 
         let mut current_column = 1;
@@ -33,7 +27,7 @@ impl Lexer {
                 let pattern = rule.patterns();
 
                 for pattern in pattern {
-                    if let Some(matcher) = pattern.find(&input) {
+                    if let Some(matcher) = pattern.find(input) {
                         if matcher.start() == 0 {
                             let length = matcher.end();
 
@@ -50,17 +44,12 @@ impl Lexer {
                 let substring = &input[..matched_length];
 
                 let token = Token::new(
-                    *matched_type.unwrap(),
+                    matched_type.unwrap(),
                     String::from(substring),
-                    TokenPosition::new(
-                        Position::new(current_line, current_column),
-                        Position::new(current_line, current_column + (substring.len() as i32))
-                    )
+                    Position::new(current_line, current_column)
                 );
 
-                if !token.tok_type().skipped() {
-                    tokens.push(token);
-                }
+                tokens.push(token);
 
                 for c in substring.chars() {
                     if c == '\n' {
@@ -71,15 +60,20 @@ impl Lexer {
                     current_column += 1;
                 }
 
-                input = input[matched_length..].to_string();
+                input = &input[matched_length..];
                 continue;
             }
 
-            return Err(format!("Unknown token at {:?}:{:?}", current_line, current_column));
+            println!("Unknown token at {:?}:{:?}", current_line, current_column);
+            std::process::exit(1);
         }
 
-        tokens.push(Token::eof());
+        if skip_whitespace {
+            tokens.retain(|token| token.tok_type() != Whitespace);
+        }
 
-        Ok(tokens)
+        tokens.push(Token::new(Eof, String::new(), Position::new(0, 0)));
+
+        tokens
     }
 }
