@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a bug of the Crash compiler or standard library
+description: Report a bug of the Crash compiler_old or standard library
 labels:
   - "bug"
 
@@ -28,7 +28,7 @@ body:
   - type: dropdown
     attributes:
       label: "Affected project"
-      description: "Is the bug affecting the Crash compiler or the standard library?"
+      description: "Is the bug affecting the Crash compiler_old or the standard library?"
       multiple: true
       options: ["Standard Library", "Compiler"]
     validations:

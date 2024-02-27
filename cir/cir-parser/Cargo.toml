@@ -1,0 +1,8 @@
+[package]
+name = "crash_ir_parser"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+crash_ast = { path = "../../crash/crash-ast" }
+crash_lexer = { path = "../../crash/crash-lexer" }

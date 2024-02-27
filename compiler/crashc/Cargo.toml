@@ -1,9 +1,0 @@
-[package]
-name = "crashc_main"
-version = "0.0.0"
-edition = "2021"
-
-[dependencies]
-clap = { version = "4.4.12", features = ["derive"] }
-tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-crashc_lexer = { path = "../crashc-lexer" }

@@ -1,0 +1,40 @@
+struct String {
+    u32;
+    char;
+}
+
+struct MyStructure {
+    u64;
+    char;
+}
+
+fn main() void {
+    init var!1 u64;
+    init var!2 char;
+
+    mov var!1 3456;
+    mov var!2 'h';
+
+    push var!1;
+    push var!2;
+    call someFunction;
+}
+
+fn test() {
+    init var!1 char[6];
+
+    init var!2 char;
+
+    mov var!2 'x'
+
+    mov var!1[1] var!2;
+}
+
+fn someFunction(u64, char) MyStructure {
+    init var!1 MyStructure;
+
+    mov var!1@1 args!1;
+    mov var!1@2 args!2;
+
+    ret var!1;
+}
