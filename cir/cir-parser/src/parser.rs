@@ -5,8 +5,8 @@ use std::process::exit;
 use crash_ast::AST;
 use crash_ast::function::Function;
 use crash_ast::types::UDT;
-use crash_ir_lexer::{Token, tokenize, TokenType};
-use crate::files::diff_files;
+use crash_ir_lexer::{Token, tokenize, TokenPosition, TokenType};
+use crash_utils::files::diff_files;
 
 pub struct Parser {
     types: Vec<UDT>,
@@ -16,18 +16,6 @@ pub struct Parser {
     tokens: Vec<Token>,
     index: usize,
     children: Vec<Parser>
-}
-
-#[macro_export]
-macro_rules! lock_parser {
-    ($parser:expr) => {
-        match $parser.await.lock() {
-            Ok(parser) => parser,
-            Err(err) => {
-                panic!("Unable to lock parser: {:?}", err)
-            }
-        }
-    };
 }
 
 impl Parser {
@@ -61,7 +49,7 @@ impl Parser {
 
             match parser.try_parse_include() {
                 Some(include_path) => {
-                    let path = Path::new(include_path.as_str());
+                    let path = Path::new(include_path.path());
                     match File::open(path) {
                         Ok(file) => {
                             let mut child_parser = Self::parse(file);
@@ -85,11 +73,31 @@ impl Parser {
                 _ => {}
             }
 
-
-
         }
 
         parser
+    }
+
+    pub fn expect_token(&mut self, tok_type: TokenType) -> Token {
+        let current_tok = self.current();
+
+        if current_tok.tok_type() == tok_type {
+            self.advance();
+
+            return current_tok;
+        }
+
+        println!("Expected {:?} at {:?}", tok_type, current_tok.position());
+
+        exit(1)
+    }
+
+    pub fn expect_type(&mut self, tok_type: TokenType) -> TokenPosition {
+        self.expect_token(tok_type).position()
+    }
+    
+    pub fn next_is_type(&self, tok_type: TokenType) -> bool {
+        self.current().tok_type() == tok_type
     }
 
     pub(crate) fn tok_at_index(&self, index: usize) -> Token {

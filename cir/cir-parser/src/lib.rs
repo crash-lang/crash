@@ -1,6 +1,7 @@
 mod parser;
 mod includes;
-mod files;
+mod literals;
+mod instructions;
 
 use std::fs::File;
 use crash_ast::AST;

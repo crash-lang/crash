@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crash/crash-ast",
     "crash/crash-main",
+    "crash/crash-utils",
     "cbcr/cbcr-parser",
     "cir/cir-parser",
     "cir/cir-lexer",

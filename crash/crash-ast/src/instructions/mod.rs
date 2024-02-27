@@ -1,5 +1,7 @@
-use crate::instructions::init::InitInstruction;
-use crate::instructions::mov::MoveInstruction;
+pub use {
+    crate::instructions::init::InitInstruction,
+    crate::instructions::mov::MoveInstruction
+};
 
 mod mov;
 mod init;

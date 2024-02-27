@@ -53,7 +53,9 @@ pub enum TokenType {
     StringLiteral,
     CharLiteral,
     IntegerLiteral,
-    FloatLiteral
+    FloatLiteral,
+
+    Name
 }
 
 impl Token {
@@ -78,7 +80,8 @@ impl Token {
     pub fn value(&self) -> &str {
         &self.value
     }
-    pub fn position(&self) -> TokenPosition {
+
+    pub fn position(self) -> TokenPosition {
         self.position
     }
 }
