@@ -55,8 +55,6 @@ fn build_rules() -> Vec<LexingRule> {
 
     add_regex_rule!(rules, FloatLiteral, "[0-9_]*\\.[0-9_]*");
 
-    add_regex_rule!(rules, Name, "[a-zA-Z_]*");
-
     rules
 }
 

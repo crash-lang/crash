@@ -1,13 +1,13 @@
 use crash_ir_lexer::{TokenPosition, TokenType};
 use crash_ir_lexer::TokenType::Semicolon;
-use crate::parser::Parser;
+use crate::parser::ParserOld;
 
 pub struct Include {
     position: TokenPosition,
     path: String
 }
 
-impl Parser {
+impl ParserOld {
 
     pub fn try_parse_include(&mut self) -> Option<Include> {
         let current_tok = self.current();

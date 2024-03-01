@@ -1,21 +1,20 @@
-mod mov;
+use crate::stream::TokenStream;
 
-use crash_ast::instructions::Instruction;
-use crash_ir_lexer::TokenType;
-use crate::parser::Parser;
+pub enum Instruction {
+    
+}
 
-impl Parser {
+impl TokenStream {
+    
+    pub fn try_parse_instructions(&mut self) -> Vec<Instruction> {
+        let mut instructions = Vec::new();
 
-    pub fn try_parse_instruction(&mut self) -> Option<Instruction> {
-        if !self.next_is_type(TokenType::Move) {
-            return None;
+        loop {
+            
+            
+            break
         }
-
-        let start_pos = self.expect_type(TokenType::Move);
-
-        //TODO parse rest
-
-        None
+        
+        instructions
     }
-
 }

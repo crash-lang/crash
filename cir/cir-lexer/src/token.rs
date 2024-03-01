@@ -35,6 +35,7 @@ pub enum TokenType {
     Struct,
     Fn,
     Include,
+    Const,
 
     Null,
 
@@ -55,7 +56,7 @@ pub enum TokenType {
     IntegerLiteral,
     FloatLiteral,
 
-    Name
+    PathLiteral
 }
 
 impl Token {

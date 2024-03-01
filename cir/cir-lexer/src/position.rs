@@ -38,10 +38,10 @@ impl TokenPosition {
         Self { start, end }
     }
 
-    pub fn start(&self) -> &Position {
-        &self.start
+    pub fn start(self) -> Position {
+        self.start
     }
-    pub fn end(&self) -> &Position {
-        &self.end
+    pub fn end(self) -> Position {
+        self.end
     }
 }

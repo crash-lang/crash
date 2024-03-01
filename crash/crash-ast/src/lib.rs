@@ -6,6 +6,7 @@ pub mod instructions;
 pub mod var;
 pub mod types;
 pub mod function;
+mod header;
 
 pub struct AST {
     types: Vec<UDT>,

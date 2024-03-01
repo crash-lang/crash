@@ -1,13 +1,13 @@
 use std::process::exit;
 use crash_ir_lexer::{TokenPosition, TokenType};
-use crate::parser::Parser;
+use crate::parser::ParserOld;
 
 pub struct Name {
     position: TokenPosition,
     name: String
 }
 
-impl Parser {
+impl ParserOld {
 
     pub fn expect_name(&mut self) -> Name {
         let mut current_tok = self.current();
