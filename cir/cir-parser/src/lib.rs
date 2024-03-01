@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::Read;
+use tokio::runtime::Handle;
 use crash_ast::function::Function;
 use crash_ast::types::UDT;
 use crate::headers::Header;
@@ -41,20 +42,48 @@ impl Parser {
             file: root_file,
             children: Vec::new(),
         };
-        
+
         let mut stream = TokenStream::new(content);
 
         loop {
             if !stream.has_more_tokens() {
                 break
             }
-            
+
             if let Some(mut header) = stream.try_parse_headers() {
                 parser.headers.append(&mut header);
+            }
+
+
+        }
+
+        let mut finished = 0;
+
+        for header in parser.headers {
+            
+            if let Header::Include(include) = header {
+                /* 
+                    Doing it async for parallel parsing.
+                    Analyser will check for mistakes later.
+                 */
+                Handle::current().spawn(async {
+                    let path = include.path();
+                    let file = match File::open(path) {
+                        Ok(file) => file,
+                        Err(err) => {
+                            panic!("Unable to open file on path {:?}: {:?}", path, err);
+                        }
+                    };
+                    parser.children.push(Parser::parse(file));
+                    finished+=1;
+                });
             }
             
             
         }
+
+        // block until all files parsed
+        while finished < parser.headers.len() {}
 
         parser
     }
