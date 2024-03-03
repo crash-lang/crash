@@ -1,5 +1,4 @@
 use crash_ir_lexer::{Token, tokenize, TokenType};
-use crate::error::expected_token_error;
 
 pub(crate) struct TokenStream {
     tokens: Vec<Token>,
@@ -21,7 +20,7 @@ impl TokenStream {
         let mut tok = self.current();
         
         if tok.tok_type() != token_type {
-            expected_token_error(token_type, tok)
+            Self::err_expected_other_token(token_type, tok)
         }
         
         self.advance();

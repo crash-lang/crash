@@ -72,7 +72,7 @@ impl Lexer {
             tokens.retain(|token| token.tok_type() != Whitespace);
         }
 
-        tokens.push(Token::new(Eof, String::new(), Position::new(0, 0)));
+        tokens.push(Token::eof());
 
         tokens
     }

@@ -7,6 +7,7 @@ members = [
     "cbcr/cbcr-parser",
     "cir/cir-parser",
     "cir/cir-lexer",
+    "cir/cir-analyser",
     "crashc/crashc-main",
     "crashc/targets/llvm-17",
     "crasher/crasher-main"

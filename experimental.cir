@@ -1,40 +1,66 @@
-struct String {
-    u32;
-    char;
+const content: string = "hello";
+
+struct Message {
+    content: string
 }
 
-struct MyStructure {
-    u64;
-    char;
+impl Message {
+
+    fn test() {
+
+    }
 }
 
-fn main() void {
-    init var!1 u64;
-    init var!2 char;
+impl Debugging for Message {
 
-    mov var!1 3456;
-    mov var!2 'h';
-
-    push var!1;
-    push var!2;
-    call someFunction;
+    fn: string to_string() {
+        return this.content;
+    }
 }
 
-fn test() {
-    init var!1 char[6];
+interface Debugging {
 
-    init var!2 char;
+    fn: string to_string();
 
-    mov var!2 'x'
-
-    mov var!1[1] var!2;
 }
 
-fn someFunction(u64, char) MyStructure {
-    init var!1 MyStructure;
+enum struct Goofy {
+    Message,
+    Status
+}
 
-    mov var!1@1 args!1;
-    mov var!1@2 args!2;
+enum Status {
+    ONLINE,
+    OFFLINE,
+    MAINTENANCE
+}
 
-    ret var!1;
+fn: bool is_message(goofy: Goofy) {
+    // one way
+    if let message: Message = goofy {
+        println(message.content);
+        return true;
+    }
+
+    // another way of doing it
+    match goofy {
+        message: Message {
+            println(message.content);
+            return true;
+        }
+        status: Status {
+            println(status);
+            return false;
+        }
+    }
+}
+
+fn main() {
+    let goofy: Goofy = Goofy::Message {
+        content: const.content
+    }
+
+    let is_message: bool = is_message(goofy);
+
+
 }

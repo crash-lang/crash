@@ -17,7 +17,7 @@ impl TokenStream {
 
         PathLiteral {
             tokens: vec![tok],
-            position: tok.position(),
+            position: tok.pos(),
             path,
         }
     }
@@ -30,7 +30,7 @@ impl TokenStream {
 
                 Some(PathLiteral {
                     tokens: vec![tok],
-                    position: tok.position(),
+                    position: tok.pos(),
                     path,
                 })
             }

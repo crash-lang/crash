@@ -21,26 +21,8 @@ fn build_rules() -> Vec<LexingRule> {
     add_regex_rule!(rules, Whitespace, "//[^\\r\\n]*");
     add_multi_line_rule!(rules, Whitespace, "/*", "*/");
 
-    add_rule!(rules, Struct, "struct");
-    add_rule!(rules, Fn, "fn");
     add_rule!(rules, Include, "include");
-    add_rule!(rules, Null, "null");
-
-    add_rule!(rules, Semicolon, ";");
-    add_rule!(rules, Comma, ",");
-    add_rule!(rules, OpenSquareBrace, "[");
-    add_rule!(rules, CloseSquareBrace, "]");
-    add_rule!(rules, OpenCurlyBrace, "{");
-    add_rule!(rules, CloseCurlyBrace, "}");
-    add_rule!(rules, OpenBrace, "(");
-    add_rule!(rules, CloseBrace, ")");
-
-    add_rule!(rules, Move, "mov");
-    add_rule!(rules, Init, "init");
-    add_rule!(rules, Push, "push");
-    add_rule!(rules, Pop, "pop");
-    add_rule!(rules, Call, "call");
-    add_rule!(rules, Ret, "ret");
+    
 
     add_rule!(rules, BooleanLiteral, "true");
     add_rule!(rules, BooleanLiteral, "false");

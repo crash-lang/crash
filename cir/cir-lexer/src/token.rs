@@ -23,40 +23,17 @@ pub enum TokenType {
     Eof,
     Whitespace,
 
-    // Instructions
-    Move,
-    Init,
-    Push,
-    Pop,
-    Call,
-    Ret,
-
-    // Keywords
-    Struct,
-    Fn,
     Include,
     Const,
-
-    Null,
-
-    // Symbols
-    OpenCurlyBrace,
-    CloseCurlyBrace,
-    OpenBrace,
-    CloseBrace,
-    OpenSquareBrace,
-    CloseSquareBrace,
-    Semicolon,
-    Comma,
-
-    // Literals
+    
+    PathLiteral,
     BooleanLiteral,
     StringLiteral,
     CharLiteral,
     IntegerLiteral,
     FloatLiteral,
-
-    PathLiteral
+    
+    Semicolon,
 }
 
 impl Token {
@@ -78,11 +55,12 @@ impl Token {
     pub fn tok_type(&self) -> TokenType {
         self.tok_type
     }
+    
     pub fn value(&self) -> &str {
         &self.value
     }
 
-    pub fn position(self) -> TokenPosition {
+    pub fn pos(self) -> TokenPosition {
         self.position
     }
 }
