@@ -8,4 +8,4 @@ crash_ast = { path = "../../crash/crash-ast" }
 crash_ir_lexer = { path = "../cir-lexer" }
 crash_utils = { path = "../../crash/crash-utils" }
 regex = "1.10.3"
-tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros", "sync"] }
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros", "sync", "fs"] }

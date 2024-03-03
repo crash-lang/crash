@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::Read;
-use tokio::runtime::Handle;
+use std::sync::{Arc, Mutex};
 use crash_ast::function::Function;
 use crash_ast::header::Header;
 use crash_ast::types::UDT;
@@ -22,67 +22,66 @@ pub struct Parser {
     children: Vec<Parser>
 }
 
-impl Parser {
-    pub fn parse(mut root_file: File) -> Self {
-        let mut content = String::new();
+#[derive(Debug)]
+enum Error {
+    FileReadError(std::io::Error),
+    IncludeFileOpenError { path: String, error: std::io::Error }
+}
 
-        match root_file.read_to_string(&mut content) {
-            Err(err) => {
-                panic!("Unable to read file: {:?}", err);
-            }
-            _ => {}
-        }
+pub fn parse(mut root_file: File) -> Result<Parser, Error> {
+    let mut content = String::new();
 
-        let mut parser = Parser {
-            headers: Vec::new(),
-            types: Vec::new(),
-            functions: Vec::new(),
-            file: root_file,
-            children: Vec::new(),
-        };
-
-        let mut stream = TokenStream::new(content);
-
-        loop {
-            if !stream.has_more_tokens() {
-                break
-            }
-
-            if let Some(mut header) = stream.try_parse_headers() {
-                parser.headers.append(&mut header);
-            }
-
-
-        }
-
-        let mut finished = 0;
-
-        for header in parser.headers {
-            
-            if let Header::Include(include) = header {
-                /* 
-                    Doing it async for parallel parsing.
-                    Analyser will check for mistakes later.
-                 */
-                Handle::current().spawn(async {
-                    let path = include.path();
-                    let file = match File::open(path) {
-                        Ok(file) => file,
-                        Err(err) => {
-                            panic!("Unable to open file on path {:?}: {:?}", path, err);
-                        }
-                    };
-                    parser.children.push(Parser::parse(file));
-                    finished+=1;
-                });
-            }
-            
-            
-        }
-
-        // block until all files parsed
-        while finished < parser.headers.len() {}
-
-        parser
+    match root_file.read_to_string(&mut content) {
+        Err(err) => return Err(Error::FileReadError(err)),
+        _ => {}
     }
+
+    let mut parser = Parser {
+        headers: Vec::new(),
+        types: Vec::new(),
+        functions: Vec::new(),
+        file: root_file,
+        children: Vec::new(),
+    };
+
+    let mutex_stream = Arc::new(Mutex::new(TokenStream::new(content)));
+    
+    loop {
+        let stream = mutex_stream.lock().unwrap();
+        if !stream.has_more_tokens() {
+            break
+        }
+
+        drop(stream);
+
+        if let Some(header) = TokenStream::try_parse_header(mutex_stream.clone()) {
+            parser.headers.push(header);
+        }
+    }
+
+    for header in parser.headers.clone() {
+
+        if let Header::Include(include) = header {
+            let path = include.path();
+            let file = match File::open(path) {
+                Ok(file) => file,
+                Err(err) => {
+                    return Err(Error::IncludeFileOpenError {
+                        path: path.to_str().unwrap_or("").to_string(),
+                        error: err
+                    })
+                }
+            };
+            parser.children.push(match parse(file) {
+                Ok(parser) => parser,
+                Err(err) => {
+                    return Err(err);
+                }
+            });
+        }
+
+
+    }
+    
+    Ok(parser)
 }

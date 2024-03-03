@@ -1,11 +1,11 @@
 use crate::statement::Statement;
-use crate::types::String;
+use crate::types::Type;
 
 #[derive(Clone)]
 pub struct Function {
-    name: String,
+    name: Type,
     statements: Vec<Statement>,
-    return_type: String
+    return_type: Type
 }
 
 impl Function {
@@ -16,11 +16,11 @@ impl Function {
         &self.statements
     }
     
-    pub fn name(&self) -> &String {
+    pub fn name(&self) -> &Type {
         &self.name
     }
     
-    pub fn return_type(&self) -> &String {
+    pub fn return_type(&self) -> &Type {
         &self.return_type
     }
 }
