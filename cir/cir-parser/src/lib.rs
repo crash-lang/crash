@@ -2,18 +2,17 @@ use std::fs::File;
 use std::io::Read;
 use tokio::runtime::Handle;
 use crash_ast::function::Function;
+use crash_ast::header::Header;
 use crash_ast::types::UDT;
-use crate::headers::Header;
 use crate::stream::TokenStream;
 
 pub mod error;
 pub(crate) mod structure;
 
-mod literals;
-mod instructions;
 mod stream;
-mod headers;
+mod header;
 mod expr;
+mod misc;
 
 pub struct Parser {
     headers: Vec<Header>,

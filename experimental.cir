@@ -1,3 +1,5 @@
+include ./anotherOne.cir
+
 const content: string = "hello";
 
 struct Message {

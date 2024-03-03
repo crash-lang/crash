@@ -1,25 +1,26 @@
-use crate::instructions::Instruction;
-use crate::types::Type;
+use crate::statement::Statement;
+use crate::types::String;
 
 #[derive(Clone)]
 pub struct Function {
     name: String,
-    return_type: Type,
-    instructions: Vec<Instruction>
+    statements: Vec<Statement>,
+    return_type: String
 }
 
 impl Function {
-    pub fn new(name: String, return_type: Type, instructions: Vec<Instruction>) -> Self {
-        Self { name, return_type, instructions }
-    }
 
-    pub fn name(&self) -> &str {
+
+    
+    pub fn statements(&self) -> &Vec<Statement> {
+        &self.statements
+    }
+    
+    pub fn name(&self) -> &String {
         &self.name
     }
-    pub fn return_type(&self) -> &Type {
+    
+    pub fn return_type(&self) -> &String {
         &self.return_type
-    }
-    pub fn instructions(&self) -> &Vec<Instruction> {
-        &self.instructions
     }
 }

@@ -26,6 +26,8 @@ pub enum TokenType {
     Include,
     Const,
     
+    Identifier,
+    
     PathLiteral,
     BooleanLiteral,
     StringLiteral,

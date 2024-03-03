@@ -1,10 +1,9 @@
-use crate::expr::variable::VariableExpr;
+use crate::expr::literal::LiteralExpr;
 
-mod variable;
 pub mod literal;
 
 #[derive(Clone)]
 pub enum Expr {
-     Var(VariableExpr),
+     Literal(LiteralExpr)
     
 }

@@ -1,11 +1,12 @@
+use std::sync::{Arc, Mutex};
 use crash_ast::expr::literal::BooleanLiteralExpr;
 use crash_ir_lexer::TokenType;
 use crate::stream::TokenStream;
 
 impl TokenStream {
 
-    pub fn try_parse_boolean_literal_expr(&mut self) -> Option<BooleanLiteralExpr> {
-        match self.try_token(TokenType::BooleanLiteral) {
+    pub fn try_parse_boolean_literal_expr(mutex_stream: Arc<Mutex<Self>>) -> Option<BooleanLiteralExpr> {
+        match Self::try_token(mutex_stream, TokenType::BooleanLiteral) {
             None => None,
             Some(tok) => {
                 let bool_val = {

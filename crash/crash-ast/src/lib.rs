@@ -1,27 +1,20 @@
-use crate::function::Function;
-use crate::types::udt::UDT;
+use crate::header::Header;
 
 pub mod expr;
-pub mod instructions;
-pub mod var;
-pub mod types;
+pub mod header;
 pub mod function;
+pub mod statement;
+pub mod types;
 
 pub struct AST {
-    types: Vec<UDT>,
-    functions: Vec<Function>
+    headers: Vec<Header>,
+
 }
 
 impl AST {
-    pub fn new(types: Vec<UDT>, functions: Vec<Function>) -> Self {
-        Self { types, functions }
-    }
-
-    pub fn types(&self) -> &Vec<UDT> {
-        &self.types
-    }
-
-    pub fn functions(&self) -> &Vec<Function> {
-        &self.functions
+    
+    
+    pub fn headers(&self) -> &Vec<Header> {
+        &self.headers
     }
 }

@@ -1,11 +1,12 @@
+use std::sync::{Arc, Mutex};
 use crash_ast::expr::literal::CharLiteralExpr;
 use crash_ir_lexer::TokenType;
 use crate::stream::TokenStream;
 
 impl TokenStream {
     
-    pub fn try_parse_char_literal_expr(&mut self) -> Option<CharLiteralExpr> {
-        match self.try_token(TokenType::CharLiteral) {
+    pub fn try_parse_char_literal_expr(mutex_stream: Arc<Mutex<Self>>) -> Option<CharLiteralExpr> {
+        match Self::try_token(mutex_stream, TokenType::CharLiteral) {
             None => None,
             Some(tok) => {
                 let char_val = {
@@ -20,9 +21,7 @@ impl TokenStream {
                     
                     let char = match chars.next() {
                         None => Self::err_text(tok, "Invalid char literal"),
-                        Some(char) => {
-                            char
-                        }
+                        Some(char) => char
                     };
                     
                     char
