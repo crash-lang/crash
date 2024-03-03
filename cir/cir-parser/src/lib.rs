@@ -67,7 +67,7 @@ pub fn parse(mut root_file: File) -> Result<Parser, Error> {
                 Ok(file) => file,
                 Err(err) => {
                     return Err(Error::IncludeFileOpenError {
-                        path: path.to_str().unwrap_or("").to_string(),
+                        path: path.to_string(),
                         error: err
                     })
                 }

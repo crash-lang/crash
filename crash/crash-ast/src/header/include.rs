@@ -2,15 +2,15 @@ use std::path::Path;
 
 #[derive(Clone)]
 pub struct Include {
-    path: &'static Path
+    path: String
 }
 
 impl Include {
-    pub fn new(path: &'static Path) -> Self {
+    pub fn new(path: String) -> Self {
         Self { path }
     }
 
-    pub fn path(&self) -> &'static Path {
-        self.path
+    pub fn path(&self) -> &String {
+        &self.path
     }
 }

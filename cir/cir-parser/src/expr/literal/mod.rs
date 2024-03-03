@@ -12,7 +12,7 @@ use crate::stream::TokenStream;
 impl TokenStream {
 
     pub fn try_parse_literal_expr(mutex_stream: Arc<Mutex<Self>>) -> Option<LiteralExpr> {
-        if let Some(string_literal) = Self::try_parse_string_literal_expr(mutex_stream) {
+        if let Some(string_literal) = Self::try_parse_string_literal_expr(mutex_stream.clone()) {
             return Some(LiteralExpr::String(string_literal));
         }
         

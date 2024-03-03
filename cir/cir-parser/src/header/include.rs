@@ -4,7 +4,7 @@ use crash_ir_lexer::TokenType;
 use crate::stream::TokenStream;
 
 impl TokenStream {
-    
+
     pub fn try_parse_include(mutex_stream: Arc<Mutex<Self>>) -> Option<Include> {
         match Self::try_token(mutex_stream.clone(), TokenType::Include) {
             None => None,

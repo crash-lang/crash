@@ -10,7 +10,8 @@ impl TokenStream {
             None => None,
             Some(tok) => {
                 let char_val = {
-                    let mut val = tok.value();
+                    let clone = tok.clone();
+                    let val = clone.value();
                     let mut chars = val.chars();
                     chars.next();
                     chars.next_back();

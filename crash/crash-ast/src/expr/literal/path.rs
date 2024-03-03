@@ -1,16 +1,15 @@
-use std::path::Path;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PathLiteralExpr {
-    path: &'static Path
+    path: String
 }
 
 impl PathLiteralExpr {
-    pub fn new(path: &'static Path) -> Self {
+    pub fn new(path: String) -> Self {
         Self { path }
     }
     
-    pub fn path(&self) -> &'static Path {
+    pub fn path(self) -> String {
         self.path
     }
 }

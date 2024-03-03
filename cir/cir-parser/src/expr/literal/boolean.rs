@@ -9,14 +9,13 @@ impl TokenStream {
         match Self::try_token(mutex_stream, TokenType::BooleanLiteral) {
             None => None,
             Some(tok) => {
-                let bool_val = {
-                    let val = tok.value();
-                    
-                    if val == "true" {
-                        true
-                    } else if val == "false" {
-                        false
-                    } else {
+                let clone = tok.clone();
+                let val = clone.value();
+                
+                let bool_val = match val { 
+                    "true" => true,
+                    "false" => false,
+                    _ => {
                         Self::err_text(tok, &format!("Invalid boolean literal {}", val))
                     }
                 };
