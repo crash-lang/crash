@@ -22,10 +22,35 @@ pub struct Token {
 pub enum TokenType {
     Eof,
     Whitespace,
-
+    
+    // Header
     Include,
     Const,
-
+    
+    // Variables
+    Let,
+    Assign,
+    
+    // UDT
+    Struct,
+    Impl,
+    Trait,
+    Enum,
+    
+    // Loops
+    For,
+    Break,
+    Continue,
+    Loop,
+    
+    // Cases
+    Match,
+    If,
+    
+    // Functions
+    Fn,
+    Return,
+    
     Identifier,
 
     PathLiteral,
@@ -36,6 +61,41 @@ pub enum TokenType {
     FloatLiteral,
     
     Semicolon,
+    Colon,
+    Comma,
+    OpenCurlyBrace,
+    CloseCurlyBrace,
+    OpenBrace,
+    CloseBrace,
+    OpenSquareBrace,
+    CloseSquareBrace,
+    Dot,
+    DoubleColon,
+    
+    Greater,
+    Less,
+    GreaterOrEquals,
+    LessOrEquals,
+    Equals,
+    NotEquals,
+    Not,
+    
+    Boolean,
+    I8,
+    U8,
+    I16,
+    U16,
+    I32,
+    U32,
+    I64,
+    U64,
+    I128,
+    U128,
+    F32,
+    F64,
+    Char,
+    String,
+    
 }
 
 impl Token {

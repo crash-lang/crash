@@ -20,7 +20,7 @@ impl Debugging for Message {
     }
 }
 
-interface Debugging {
+trait Debugging {
 
     fn: string to_string();
 

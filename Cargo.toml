@@ -9,6 +9,7 @@ members = [
     "cir/cir-lexer",
     "cir/cir-analyser",
     "crashc/crashc-main",
-    "crashc/targets/llvm-17",
+    "crashc/targets/aot-llvm-17",
+    "crashc/targets/jit-rust",
     "crasher/crasher-main"
 ]
