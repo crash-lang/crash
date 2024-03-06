@@ -1,0 +1,7 @@
+const y = 3;
+
+fn: void main() {
+    let x: u32 = y + y;
+    
+    println(x);
+}

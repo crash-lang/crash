@@ -95,6 +95,7 @@ pub enum TokenType {
     F64,
     Char,
     String,
+    Void
     
 }
 
